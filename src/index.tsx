@@ -6,10 +6,10 @@ import ErrorBoundary from './components/ErrorBoundary/index';
 
 ReactDOM.render(
   // <React.StrictMode>
-    <ErrorBoundary>
+    // {/* <ErrorBoundary> */}
       <App />
-    </ErrorBoundary>
-  // </React.StrictMode>,
+    // {/* </ErrorBoundary> */}
+  // </React.StrictMode>
   ,document.getElementById('root')
 );
 

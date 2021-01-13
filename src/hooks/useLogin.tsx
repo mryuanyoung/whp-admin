@@ -1,23 +1,42 @@
-import React, { useState, useContext, Dispatch, SetStateAction,Context } from 'react';
+import React, { useState, useCallback } from 'react';
+import { LoginResponse } from '../interface/account';
+import {typeMD5} from '../constant/admin';
 
-interface RType {
-    ctx: Context<boolean>,
-    setLogin: Dispatch<SetStateAction<boolean>>
-}
+/**
+ * @desc 用户登录逻辑
+ */
+const useLogin = (): {
+    login: boolean,
+    type: string,
+    func: ((s: LoginResponse) => void),
+} => {
+    const [login, setLogin] = useState(false);
+    const token = localStorage.getItem('token');
+    const type = localStorage.getItem('type');
 
+    const signin = useCallback(function (s: LoginResponse) {
+        localStorage.setItem('token', s.token);
+        localStorage.setItem('type', typeMD5.get(s.type));
+        setLogin(true);
+    }, []);
 
-const useLogin = ():RType => {
-    
-    console.log('render useLogin');
-    const [login, setLogin] = useState<boolean>(false);
-    const ctx = React.createContext(login);
-
-    return {
-        ctx,
-        setLogin
-    };
-}
-
-// export const useLoginState = () => useContext(ctx);
+    if (token && type) {
+        if (!login) {
+            setLogin(true);
+        }
+        return {
+            login,
+            type,
+            func: function () { }
+        };
+    }
+    else {
+        return {
+            login,
+            type: '',
+            func: signin
+        };
+    }
+};
 
 export default useLogin;

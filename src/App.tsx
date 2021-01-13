@@ -1,80 +1,103 @@
-import React, { useContext, useState, Dispatch, SetStateAction } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect, useHistory } from 'react-router-dom';
-import LoginPage from './pages/Login/login';
-import AlarmPage from './pages/Alarm/index';
+import React, { lazy, Suspense, useState, createContext, Dispatch, SetStateAction } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
 import './App.css';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Spin } from 'antd';
 import {
-    AppstoreOutlined,
-    BarChartOutlined,
-    CloudOutlined,
-    ShopOutlined,
+    WarningOutlined,
+    ExperimentOutlined,
+    SwapOutlined,
     TeamOutlined,
     UserOutlined,
-    UploadOutlined,
-    VideoCameraOutlined,
+    MenuUnfoldOutlined,
+    MenuFoldOutlined
+
 } from '@ant-design/icons';
+import { UserType, typeMD5 } from './constant/admin';
+
+import AlarmPage from './pages/Alarm/index';
+import LoginPage from './pages/Login/index';
+const AccountPage = lazy(() => import('./pages/Account/index'));
+const ChemicalsPage = lazy(() => import('./pages/Chemicals/index'));
+const EnterpriseAdministratorsPage = lazy(() => import('./pages/EntAdmins/index'));
+const EnterpriseMembersPage = lazy(() => import('./pages/EntMembers/index'));
+const TransferPage = lazy(() => import('./pages/Transfer/index'));
 
 const { Header, Content, Footer, Sider } = Layout;
 
+export const TypeContext = createContext({ type: '', setType: (() => { }) as Dispatch<SetStateAction<string>> });
 /**
  *  @desc 根组件，控制路由
  */
-
-
-export const LoginCtx = React.createContext({
-    state: false,
-    changeState: (() => { }) as Dispatch<SetStateAction<boolean>>
-})
-
 function App() {
-    const [login, setLogin] = useState<boolean>(false);
+
+    const [collapsed, setCollapsed] = useState(false);
+    const stype = localStorage.getItem('type') || '';
+    const [type, setType] = useState(stype);
 
     return (
-        <LoginCtx.Provider value={{ state: login, changeState: setLogin }}>
+        <TypeContext.Provider value={{ type, setType }}>
             <Router>
-                {login ? null : <Redirect push to='/login' exact>请登录</Redirect>}
+                {type ? null : <Redirect push to='/login' exact>请登录</Redirect>}
                 <Switch>
+
                     <Route path='/login'><LoginPage /></Route>
                     <Route path='/'>
-                        <Layout>
+                        <Layout style={{ height: '100vh', width: '100vw' }}>
                             <Sider
+                                trigger={null} collapsible collapsed={collapsed}
                                 style={{
                                     overflow: 'auto',
                                     height: '100vh',
-                                    position: 'fixed',
+                                    position: 'relative',
                                     left: 0,
                                 }}
                             >
                                 <div className="logo" />
-                                <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-                                    <Menu.Item key="1" icon={<UserOutlined />}>fuck</Menu.Item>
-                                    <Menu.Item key="2" icon={<VideoCameraOutlined />}>nav 2</Menu.Item>
-                                    <Menu.Item key="3" icon={<UploadOutlined />}>nav 3</Menu.Item>
-                                    <Menu.Item key="4" icon={<BarChartOutlined />}>nav 4</Menu.Item>
-                                    <Menu.Item key="5" icon={<CloudOutlined />}>nav 5</Menu.Item>
-                                    <Menu.Item key="6" icon={<AppstoreOutlined />}>nav 6</Menu.Item>
+                                <Menu theme="dark" mode="inline" >
+                                    <Menu.Item key="1" icon={<WarningOutlined />}><Link to='/alarm'>报警</Link></Menu.Item>
+                                    {
+                                        type === typeMD5.get(UserType.SADMIN) ? (
+                                            <>
+                                                <Menu.Item key="2" icon={<TeamOutlined />}><Link to='/entadmins'>企业管理员</Link></Menu.Item>
+                                                <Menu.Item key="3" icon={<ExperimentOutlined />}><Link to='/chemicals'>化学品</Link></Menu.Item>
+                                            </>
+                                        ) : null
+                                    }
+                                    {
+                                        type === typeMD5.get(UserType.EADMIN) ? (
+                                            <>
+                                                <Menu.Item key="4" icon={<TeamOutlined />}><Link to='/entmembers'>企业成员</Link></Menu.Item>
+                                                <Menu.Item key="5" icon={<SwapOutlined />}><Link to='/transfer'>流转信息</Link></Menu.Item>
+                                            </>
+                                        ) : null
+                                    }
+                                    <Menu.Item key="6" icon={<UserOutlined />}><Link to='/account'>账户</Link></Menu.Item>
                                 </Menu>
                             </Sider>
-                            <Layout className="site-layout" style={{ marginLeft: 200 }}>
-                                <Header className="site-layout-background" style={{ padding: 0 }} />
-                                <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
-                                    <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' }}>
-                                        <AlarmPage />
-                                       FUCKOU
-                                    </div>
+                            <Layout className="site-layout">
+                                <Header className="site-layout-background" style={{ padding: 0 }} >
+                                    {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+                                        className: 'trigger',
+                                        onClick: () => setCollapsed((s) => !s),
+                                    })}
+                                </Header>
+                                <Content className="site-layout-background" style={{ margin: '24px 16px', padding: 24, textAlign: 'center' }}>
+                                    <Suspense fallback={<Spin></Spin>}>
+                                        <Route path='/alarm' exact><AlarmPage /></Route>
+                                        <Route path='/entadmins' exact><EnterpriseAdministratorsPage /></Route>
+                                        <Route path='/chemicals' exact><ChemicalsPage /></Route>
+                                        <Route path='/entmembers' exact><EnterpriseMembersPage /></Route>
+                                        <Route path='/transfer' exact><TransferPage /></Route>
+                                        <Route path='/account' eaxct><AccountPage /></Route>
+                                    </Suspense>
                                 </Content>
-                                <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+                                <Footer style={{ textAlign: 'center' }}>如有任何问题请联系微信:18280308568</Footer>
                             </Layout>
                         </Layout>
                     </Route>
-                    {/* <Route path='/a'>AAAAAAAA</Route>
-                    <Route path='/b'>BBBBBB</Route> */}
                 </Switch>
-
             </Router>
-        </LoginCtx.Provider>
-
+        </TypeContext.Provider>
     );
 }
 

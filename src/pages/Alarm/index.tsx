@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Alarm = () => {
+const AlarmPage = () => {
     return (
         <div>
-           JDGFV
+           报警信息
         </div>
     )
 };
 
-export default Alarm;
+export default AlarmPage;
