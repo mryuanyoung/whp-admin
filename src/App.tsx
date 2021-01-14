@@ -29,8 +29,7 @@ export const TypeContext = createContext({ type: '', setType: (() => { }) as Dis
  *  @desc 根组件，控制路由
  */
 function App() {
-
-    const [collapsed, setCollapsed] = useState(false);
+    // const [collapsed, setCollapsed] = useState(false);
     const stype = localStorage.getItem('type') || '';
     const [type, setType] = useState(stype);
 
@@ -42,19 +41,20 @@ function App() {
 
                     <Route path='/login'><LoginPage /></Route>
                     <Route path='/'>
-                        <Layout style={{ height: '100vh', width: '100vw' }}>
+                        <Layout>
                             <Sider
-                                trigger={null} collapsible collapsed={collapsed}
+                                // trigger={null} collapsible collapsed={collapsed}
                                 style={{
                                     overflow: 'auto',
                                     height: '100vh',
-                                    position: 'relative',
+                                    position: 'fixed',
                                     left: 0,
                                 }}
+                                width='150'
                             >
                                 <div className="logo" />
                                 <Menu theme="dark" mode="inline" >
-                                    <Menu.Item key="1" icon={<WarningOutlined />}><Link to='/alarm'>报警</Link></Menu.Item>
+                                    <Menu.Item key="1" icon={<WarningOutlined />}><Link to='/alarm'>报警信息</Link></Menu.Item>
                                     {
                                         type === typeMD5.get(UserType.SADMIN) ? (
                                             <>
@@ -71,15 +71,17 @@ function App() {
                                             </>
                                         ) : null
                                     }
-                                    <Menu.Item key="6" icon={<UserOutlined />}><Link to='/account'>账户</Link></Menu.Item>
+                                    <Menu.Item key="6" icon={<UserOutlined />}><Link to='/account'>个人中心</Link></Menu.Item>
                                 </Menu>
                             </Sider>
                             <Layout className="site-layout">
                                 <Header className="site-layout-background" style={{ padding: 0 }} >
-                                    {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+                                    {/* {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
                                         className: 'trigger',
-                                        onClick: () => setCollapsed((s) => !s),
-                                    })}
+                                        onClick: () => {
+                                            setCollapsed((s) => !s);
+                                        },
+                                    })} */}
                                 </Header>
                                 <Content className="site-layout-background" style={{ margin: '24px 16px', padding: 24, textAlign: 'center' }}>
                                     <Suspense fallback={<Spin></Spin>}>

@@ -1,9 +1,14 @@
 import axios from 'axios';
 import { Response } from '../interface/index';
 
+const token = localStorage.getItem('token');
+
 const Axios = axios.create({
     // baseURL: 'http://xxxx',
-    timeout: 2000
+    timeout: 2000,
+    params: {
+        token
+    }
 });
 
 //请求拦截器

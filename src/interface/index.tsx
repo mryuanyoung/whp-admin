@@ -3,3 +3,8 @@ export interface Response {
     message: string,
     content: any,
 }
+
+export interface PageParam {
+    page: number,
+    limit: number,
+}
