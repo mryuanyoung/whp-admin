@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
-import {typeMD5 } from '../../constant/admin';
-import { TypeContext } from '../../App';
+import { UserInfoCtx } from '../../App';
 import { login as loginApi } from '../../api/account';
+import {updateAxios} from '../../utils/axios';
 import { useHistory } from 'react-router-dom';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
@@ -9,16 +9,16 @@ import { LoginForm } from '../../interface/account';
 import style from './index.module.scss';
 
 const LoginBox = () => {
-    const {setType} = useContext(TypeContext);
+    const {setUserInfo} = useContext(UserInfoCtx);
     const history = useHistory();
 
     const onFinish = async function(values: LoginForm){
-        const res = await loginApi(values);
-        if(res.type && res.token){
-            localStorage.setItem('token', res.token);
-            const md5 = typeMD5.get(res.type)
-            localStorage.setItem('type', md5);
-            setType(md5)
+        const userInfo = await loginApi(values);
+        if(userInfo.token){
+            //todo 编解码
+            localStorage.setItem('u', encodeURI(JSON.stringify(userInfo)));
+            setUserInfo(userInfo);
+            updateAxios(userInfo.token);
             message.success('登录成功!', 1);
             history.push('/');
         }

@@ -1,10 +1,10 @@
 import Axios from '../utils/axios';
-import { AlarmInfo } from '../interface/alarm';
+import { AlarmList, HandleAlaramParam } from '../interface/alarm';
 import { PageParam } from '../interface/index';
 
-export const getAlarmList = async (page: PageParam = { page: 1, limit: 10 }): Promise<Array<AlarmInfo>> => {
+export const getAlarmList = async (page: PageParam = { page: 1, limit: 10 }): Promise<AlarmList> => {
     try {
-        const res: Array<AlarmInfo> = await Axios.get('/web/getAlarmList', {
+        const res: AlarmList = await Axios.get('/web/getAlarmList', {
             params: { ...page }
         });
         return res;
@@ -26,10 +26,19 @@ export const getAlarmList = async (page: PageParam = { page: 1, limit: 10 }): Pr
             createTime: '2020-09-29 16:08:02',
             modifyTime: '2020-09-29 16:09:34',
         };
-        const res = [];
-        for(let i=0; i<80; i++){
-            res.push({...mock, title: '2-氯苯胺泄露     ' + i});
+        const res:AlarmList = {total:80, data: []};
+        for(let i=0; i<10; i++){
+            res.data.push({...mock, title: '2-氯苯胺泄露     ' + i});
         }
         return res;
+    }
+}
+
+export const handleAlaram = async(param: HandleAlaramParam ) => {
+    try{
+        await Axios.post('/web/handleAlarm', param);
+    }
+    catch(error){
+        console.log(error);
     }
 }

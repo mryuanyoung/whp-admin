@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { Response } from '../interface/index';
+import {LoginResponse} from '../interface/account';
 
-const token = localStorage.getItem('token');
+const localU = localStorage.getItem('u') || '{}';
+const {token} = (JSON.parse(decodeURI(localU))) as LoginResponse;
 
 const Axios = axios.create({
     // baseURL: 'http://xxxx',
@@ -41,5 +43,9 @@ Axios.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+export const updateAxios = (token: string) => {
+    Axios.defaults.params = {token};
+}
 
 export default Axios;

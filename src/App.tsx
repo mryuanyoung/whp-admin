@@ -8,12 +8,9 @@ import {
     SwapOutlined,
     TeamOutlined,
     UserOutlined,
-    MenuUnfoldOutlined,
-    MenuFoldOutlined
-
 } from '@ant-design/icons';
 import { UserType, typeMD5 } from './constant/admin';
-
+import { LoginResponse } from './interface/account';
 import AlarmPage from './pages/Alarm/index';
 import LoginPage from './pages/Login/index';
 const AccountPage = lazy(() => import('./pages/Account/index'));
@@ -24,26 +21,30 @@ const TransferPage = lazy(() => import('./pages/Transfer/index'));
 
 const { Header, Content, Footer, Sider } = Layout;
 
-export const TypeContext = createContext({ type: '', setType: (() => { }) as Dispatch<SetStateAction<string>> });
+interface CtxType { 
+    userInfo: LoginResponse,
+    setUserInfo: Dispatch<SetStateAction<LoginResponse>>
+}
+
+export const UserInfoCtx = createContext<CtxType>({ userInfo: {} as LoginResponse, setUserInfo: (() => { }) });
 /**
  *  @desc 根组件，控制路由
  */
 function App() {
-    // const [collapsed, setCollapsed] = useState(false);
-    const stype = localStorage.getItem('type') || '';
-    const [type, setType] = useState(stype);
+    const localU = localStorage.getItem('u') || '{}';
+    const info = (JSON.parse(decodeURI(localU))) as LoginResponse;
+    const [userInfo, setUserInfo] = useState<LoginResponse>(info);
 
     return (
-        <TypeContext.Provider value={{ type, setType }}>
+        <UserInfoCtx.Provider value={{ userInfo, setUserInfo }}>
             <Router>
-                {type ? null : <Redirect push to='/login' exact>请登录</Redirect>}
+                {userInfo.type ? null : <Redirect push to='/login' exact>请登录</Redirect>}
                 <Switch>
 
                     <Route path='/login'><LoginPage /></Route>
                     <Route path='/'>
                         <Layout>
                             <Sider
-                                // trigger={null} collapsible collapsed={collapsed}
                                 style={{
                                     overflow: 'auto',
                                     height: '100vh',
@@ -56,7 +57,7 @@ function App() {
                                 <Menu theme="dark" mode="inline" >
                                     <Menu.Item key="1" icon={<WarningOutlined />}><Link to='/alarm'>报警信息</Link></Menu.Item>
                                     {
-                                        type === typeMD5.get(UserType.SADMIN) ? (
+                                        userInfo.type === UserType.SADMIN ? (
                                             <>
                                                 <Menu.Item key="2" icon={<TeamOutlined />}><Link to='/entadmins'>企业管理员</Link></Menu.Item>
                                                 <Menu.Item key="3" icon={<ExperimentOutlined />}><Link to='/chemicals'>化学品</Link></Menu.Item>
@@ -64,7 +65,7 @@ function App() {
                                         ) : null
                                     }
                                     {
-                                        type === typeMD5.get(UserType.EADMIN) ? (
+                                        userInfo.type === UserType.EADMIN ? (
                                             <>
                                                 <Menu.Item key="4" icon={<TeamOutlined />}><Link to='/entmembers'>企业成员</Link></Menu.Item>
                                                 <Menu.Item key="5" icon={<SwapOutlined />}><Link to='/transfer'>流转信息</Link></Menu.Item>
@@ -75,14 +76,7 @@ function App() {
                                 </Menu>
                             </Sider>
                             <Layout className="site-layout">
-                                <Header className="site-layout-background" style={{ padding: 0 }} >
-                                    {/* {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                                        className: 'trigger',
-                                        onClick: () => {
-                                            setCollapsed((s) => !s);
-                                        },
-                                    })} */}
-                                </Header>
+                                <Header className="site-layout-background" style={{ padding: 0 }} ></Header>
                                 <Content className="site-layout-background" style={{ margin: '24px 16px', padding: 24, textAlign: 'center' }}>
                                     <Suspense fallback={<Spin></Spin>}>
                                         <Route path='/alarm' exact><AlarmPage /></Route>
@@ -99,7 +93,7 @@ function App() {
                     </Route>
                 </Switch>
             </Router>
-        </TypeContext.Provider>
+        </UserInfoCtx.Provider>
     );
 }
 

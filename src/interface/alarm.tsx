@@ -1,3 +1,5 @@
+import {ListResponse} from './index';
+
 export interface AlarmInfo {
     id: number,
     chemicalId: number,
@@ -13,4 +15,12 @@ export interface AlarmInfo {
     handleManagerId: number,
     createTime: string,
     modifyTime: string,
+}
+
+export type AlarmList = ListResponse<AlarmInfo>;
+
+export interface HandleAlaramParam {
+    alarmId: number,
+    state: number,
+    managerId: number,
 }
