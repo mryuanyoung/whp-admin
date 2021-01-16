@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
 import {UserInfoCtx} from '../../App';
-import {LoginResponse} from '../../interface/account';
 import { Table, Tag, Select, message } from 'antd';
 import { getAlarmList, handleAlaram } from '../../api/alarm';
 import { PAGELIMIT } from '../../constant/index';
 import { AlarmState, TagColors } from '../../constant/alarm';
 import { AlarmInfo, HandleAlaramParam } from '../../interface/alarm';
 import AlarmItem from '../../components/AlarmItem/index';
-import style from './index.module.scss';
 import moment from 'moment';
 import { FieldTimeOutlined, ExperimentOutlined, EditOutlined, RedoOutlined, SettingOutlined } from '@ant-design/icons';
 
-const { Column, ColumnGroup } = Table;
+const { Column } = Table;
 const { Option } = Select;
 
 const AlarmPage = () => {

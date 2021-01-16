@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { LoginResponse } from '../interface/account';
-import {typeMD5} from '../constant/admin';
+// import {typeMD5} from '../constant/admin';
 
 /**
  * @desc 用户登录逻辑
@@ -16,7 +16,7 @@ const useLogin = (): {
 
     const signin = useCallback(function (s: LoginResponse) {
         localStorage.setItem('token', s.token);
-        localStorage.setItem('type', typeMD5.get(s.type));
+        // localStorage.setItem('type', typeMD5.get(s.type));
         setLogin(true);
     }, []);
 

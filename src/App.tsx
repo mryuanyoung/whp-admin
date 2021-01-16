@@ -9,7 +9,7 @@ import {
     TeamOutlined,
     UserOutlined,
 } from '@ant-design/icons';
-import { UserType, typeMD5 } from './constant/admin';
+import { UserType } from './constant/admin';
 import { LoginResponse } from './interface/account';
 import AlarmPage from './pages/Alarm/index';
 import LoginPage from './pages/Login/index';
