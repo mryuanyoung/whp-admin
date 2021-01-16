@@ -1,18 +1,20 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import { UserInfoCtx } from '../../App';
 import { login as loginApi } from '../../api/account';
 import {updateAxios} from '../../utils/axios';
 import { useHistory } from 'react-router-dom';
 import { Form, Input, Button, Checkbox, message } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined, EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
 import { LoginForm } from '../../interface/account';
 import style from './index.module.scss';
 
 const LoginBox = () => {
     const {setUserInfo} = useContext(UserInfoCtx);
+    const [loading, setLoading] = useState(false);
     const history = useHistory();
 
     const onFinish = async function(values: LoginForm){
+        setLoading(true);
         const userInfo = await loginApi(values);
         if(userInfo.token){
             //todo 编解码
@@ -25,6 +27,7 @@ const LoginBox = () => {
         else{
             message.error('邮箱或密码错误!', 1);
         }
+        setLoading(false);
     };
 
     return (
@@ -56,9 +59,9 @@ const LoginBox = () => {
                     },
                 ]}
             >
-                <Input
+                <Input.Password
                     prefix={<LockOutlined className="site-form-item-icon" />}
-                    type="password"
+                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                     placeholder="Password"
                 />
             </Form.Item>
@@ -69,7 +72,7 @@ const LoginBox = () => {
             </Form.Item>
 
             <Form.Item>
-                <Button type="primary" htmlType="submit" className={style.loginFormButton}>
+                <Button loading={loading} type="primary" htmlType="submit" className={style.loginFormButton}>
                     登 录
                 </Button>
             </Form.Item>

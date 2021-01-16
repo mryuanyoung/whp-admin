@@ -1,5 +1,5 @@
 import Axios from '../utils/axios';
-import { LoginForm, LoginResponse } from '../interface/account';
+import { LoginForm, LoginResponse, PasswordForm } from '../interface/account';
 
 
 export const login = async (data: LoginForm): Promise<LoginResponse> => {
@@ -22,5 +22,14 @@ export const login = async (data: LoginForm): Promise<LoginResponse> => {
             // type: '',
             // token: '',
         };
+    }
+}
+
+export const changePassword = async(param: PasswordForm) => {
+    try{
+        await Axios.post('/web/editPwd', param);
+    }
+    catch(error){
+        console.log(error);
     }
 }

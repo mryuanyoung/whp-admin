@@ -13,3 +13,8 @@ export interface LoginResponse {
     position: string,
     companyName: string,
 }
+
+export interface PasswordForm {
+    email: string,
+    newPwd: string,
+}
