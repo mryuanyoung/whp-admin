@@ -48,7 +48,8 @@ const AlarmPage = () => {
 
     const changeState = useCallback(async(param: HandleAlaramParam) => {
         await handleAlaram(param);
-        getList({page});
+        await getList({page});
+        message.success('成功更新状态!', 2);
     }, []);
 
     useEffect(() => {
@@ -77,15 +78,15 @@ const AlarmPage = () => {
         >
             <Column
                 align='center'
-                title={<><ExperimentOutlined /><br /><span>化学品</span></>}
-                dataIndex="chemicalName"
-                key="chemicalName"
-            />
-            <Column
-                align='center'
                 title={<><EditOutlined /><br /><span>标题</span></>}
                 dataIndex="title"
                 key="title"
+            />
+            <Column
+                align='center'
+                title={<><ExperimentOutlined /><br /><span>化学品</span></>}
+                dataIndex="chemicalName"
+                key="chemicalName"
             />
             <Column
                 align='center'
@@ -107,7 +108,7 @@ const AlarmPage = () => {
                 title={<><SettingOutlined /><br /><span>操作</span></>}
                 key="action"
                 render={(text: AlarmInfo) => (
-                    <Select defaultValue={text.state} style={{ width: '7rem' }} onChange={(v)=> changeState({alarmId: text.id, state: v, managerId: parseInt(userInfo.id) })}>  
+                    <Select defaultValue={text.state} style={{ width: '6.2rem' }} onChange={(v)=> changeState({alarmId: text.id, state: v, managerId: parseInt(userInfo.id) })}>  
                         {[1,2,3,4].map((item => <Option value={item} disabled={text.state === item} key={item}>{AlarmState[item]}</Option>))}
                     </Select>
                 )}
