@@ -1,0 +1,19 @@
+.alarmItem {
+    margin-bottom: 3vh;
+    box-shadow: 7px 7px 5px #eee;
+    padding: 0 0 10px 0;
+    padding-top: 0;
+    width: 50vw;
+    cursor: pointer;
+
+    .title{
+        font-size: 1.1rem;
+        padding: 3px 0 3px 0;
+        width: 100%;
+    }
+}
+
+.expand {
+    background-color: white;
+    border: 1px solid cyan;
+}

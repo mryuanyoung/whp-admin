@@ -1,9 +1,16 @@
 import axios from 'axios';
 import { Response } from '../interface/index';
+import {LoginResponse} from '../interface/account';
+
+const localU = localStorage.getItem('u') || '{}';
+const {token} = (JSON.parse(decodeURI(localU))) as LoginResponse;
 
 const Axios = axios.create({
     // baseURL: 'http://xxxx',
-    timeout: 2000
+    timeout: 2000,
+    params: {
+        token
+    }
 });
 
 //请求拦截器
@@ -36,5 +43,9 @@ Axios.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+export const updateAxios = (token: string) => {
+    Axios.defaults.params = {token};
+}
 
 export default Axios;
