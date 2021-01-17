@@ -8,7 +8,6 @@ import { ModalProps } from '../../pages/EntAdmins/index';
 import { GoogleOutlined, AlignLeftOutlined, ApartmentOutlined, MailOutlined, SettingOutlined, UserOutlined, GoldOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
-const { Option } = Select;
 
 interface Props {
     type: number,
@@ -43,13 +42,13 @@ const AdminTable: React.FC<Props> = (props) => {
     }, []);
 
     const handleUpdateModal = useCallback((data: AdminInfo) => {
-        setModalProps((props) => ({ ...props, visible: true, type: [1, 0], initDate: data }))
+        setModalProps((props) => ({ ...props, visible: true, type: [1, type], initDate: data }))
     }, []);
 
     const handleDelete = useCallback(async (id: number) => {
         modal.confirm({
             title: '确认删除',
-            content: '确认删除此企业管理员?',
+            content: `确认删除此企业${type === 1 ? '成员' : '管理员'}?`,
             okText: '确定',
             cancelText: '取消',
             onOk: async () => {
@@ -126,7 +125,7 @@ const AdminTable: React.FC<Props> = (props) => {
                         return (
                             <Space size='small'>
                                 <a onClick={() => handleUpdateModal(text)}>更新</a>
-                                <a onClick={() => handleDelete(parseInt(text.id))}>删除</a>
+                                <a onClick={() => handleDelete(text.id)}>删除</a>
                             </Space>
                         )
                     }}

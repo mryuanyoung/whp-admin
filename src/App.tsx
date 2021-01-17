@@ -16,7 +16,7 @@ import LoginPage from './pages/Login/index';
 const AccountPage = lazy(() => import('./pages/Account/index'));
 const ChemicalsPage = lazy(() => import('./pages/Chemicals/index'));
 const EnterpriseAdministratorsPage = lazy(() => import('./pages/EntAdmins/index'));
-const EnterpriseMembersPage = lazy(() => import('./pages/EntMembers/index'));
+// const EnterpriseMembersPage = lazy(() => import('./pages/EntMembers/index'));
 const TransferPage = lazy(() => import('./pages/Transfer/index'));
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -80,9 +80,11 @@ function App() {
                                 <Content className="site-layout-background" style={{ margin: '24px 16px', padding: 24, textAlign: 'center' }}>
                                     <Suspense fallback={<Spin></Spin>}>
                                         <Route path='/alarm' exact><AlarmPage /></Route>
-                                        <Route path='/entadmins' exact><EnterpriseAdministratorsPage /></Route>
+                                        <Route path='/entadmins' exact><EnterpriseAdministratorsPage type={2}/></Route>
                                         <Route path='/chemicals' exact><ChemicalsPage /></Route>
-                                        <Route path='/entmembers' exact><EnterpriseMembersPage /></Route>
+                                        {/* 企业成员页面目前和管理员页面一致，复用管理员页面 */}
+                                        {/* <Route path='/entmembers' exact><EnterpriseMembersPage /></Route> */}
+                                        <Route path='/entmembers' exact><EnterpriseAdministratorsPage type={1}/></Route>
                                         <Route path='/transfer' exact><TransferPage /></Route>
                                         <Route path='/account' eaxct><AccountPage /></Route>
                                     </Suspense>

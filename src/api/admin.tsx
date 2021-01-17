@@ -11,7 +11,7 @@ export const getAdminList = async (param: AdminList): Promise<AdminListResponse>
     catch (error) {
         console.log(error);
         const mock = {
-            id:'1',
+            id: 1,
             department: '南京大学教务处',
             email: '123@qq.com',
             name: '张三',
@@ -31,7 +31,7 @@ export const getAdminList = async (param: AdminList): Promise<AdminListResponse>
     }
 };
 
-export const updateAdmin = async(param: AdminForm) => {
+export const updateAdmin = async(param: AdminForm & {id: number}) => {
     try{
         const res = await Axios.post('/web/editUser', param);
         return res;

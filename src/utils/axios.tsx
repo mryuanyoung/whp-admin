@@ -6,7 +6,7 @@ const localU = localStorage.getItem('u') || '{}';
 const {token} = (JSON.parse(decodeURI(localU))) as LoginResponse;
 
 const Axios = axios.create({
-    // baseURL: 'http://xxxx',
+    // baseURL: 'http://121.40.243.225:8082/',
     timeout: 2000,
     params: {
         token

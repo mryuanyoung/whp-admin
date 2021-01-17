@@ -6,8 +6,7 @@ export interface AdminList {
     limit: number,
 }
 
-interface BaseAdmin {
-    id: string
+export interface BaseAdmin {
     department: string,
     email: string,
     name: string,
@@ -16,6 +15,7 @@ interface BaseAdmin {
 }
 
 export interface AdminInfo extends BaseAdmin {
+    id: number,
     CompanyName: string,
     description: string,
 }
