@@ -84,7 +84,7 @@ function App() {
                                     <Suspense fallback={<Spin></Spin>}>
                                         <Route path='/alarm' exact><AlarmPage /></Route>
                                         <Route path='/entinfo' exact><EnterpriseInfoPage /></Route>
-                                        <Route path='/entadmins' exact><EnterpriseAdministratorsPage type={0}/></Route>
+                                        <Route path='/entadmins' exact><EnterpriseAdministratorsPage type={2}/></Route>
                                         <Route path='/chemicals' exact><ChemicalsPage /></Route>
                                         {/* 企业成员页面目前和管理员页面一致，复用管理员页面 */}
                                         {/* <Route path='/entmembers' exact><EnterpriseMembersPage /></Route> */}
