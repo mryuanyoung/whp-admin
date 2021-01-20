@@ -1,0 +1,37 @@
+.descItem {
+    margin-bottom: 7px;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+p.descItemP {
+    display: block;
+    margin-bottom: 16px;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 16px;
+    line-height: 1.5715;
+}
+
+.descItemLabel {
+    display: inline-block;
+    margin-right: 8px;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+#left{
+    position: fixed;
+    width: 10vw;
+    transform: translateX(-18px);
+}
+
+#right{
+    margin-left: 10vw;
+}
+
+.divi {
+    position: fixed;
+    margin-left: 10vw;
+    height: 100vh;
+}
