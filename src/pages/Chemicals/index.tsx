@@ -26,7 +26,7 @@ const ChemicalsPage: React.FC = () => {
     const getList = useCallback(({ page, key = null, limit = PAGELIMIT}) => {
         setLoading(true);
         getChemicalList({ page, limit, key })
-            .then(({ total, data: list }) => {
+            .then(({ total, content: list }) => {
                 setTotal(total);
                 if (data.length === 0) {
                     list.length = total;

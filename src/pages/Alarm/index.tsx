@@ -25,7 +25,7 @@ const AlarmPage = () => {
     const getList = useCallback(({ page, limit = PAGELIMIT }) => {
         setLoading(true);
         getAlarmList({ page, limit })
-            .then(({ total, data: list }) => {
+            .then(({ total, content: list }) => {
                 setTotal(total);
                 if (data.length === 0) {
                     list.length = total;
@@ -93,7 +93,7 @@ const AlarmPage = () => {
                 title={<><RedoOutlined /><br /><span>状态</span></>}
                 dataIndex="state"
                 key="state"
-                render={(text) => <Tag color={TagColors[parseInt(text) - 1]}>{AlarmState[text]}</Tag>}
+                render={(text) => <Tag color={TagColors[parseInt(text) - 1]} className={style.tag}>{AlarmState[text]}</Tag>}
             />
             <Column
                 align='center'

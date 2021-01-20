@@ -26,9 +26,9 @@ export const getAlarmList = async (page: PageParam = { page: 1, limit: 10 }): Pr
             createTime: '2020-09-29 16:08:02',
             modifyTime: '2020-09-29 16:09:34',
         };
-        const res:AlarmList = {total:80, data: []};
+        const res:AlarmList = {success: true, message: '', total:80, content: []};
         for(let i=0; i<10; i++){
-            res.data.push({...mock, title: '2-氯苯胺泄露     ' + i});
+            res.content.push({...mock, title: '2-氯苯胺泄露     ' + i});
         }
         return res;
     }

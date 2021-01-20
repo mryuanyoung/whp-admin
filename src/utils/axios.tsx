@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { Response } from '../interface/index';
+import { ListResponse } from '../interface/index';
 import {LoginResponse} from '../interface/account';
 
 const localU = localStorage.getItem('u') || '{}';
 const {token} = (JSON.parse(decodeURI(localU))) as LoginResponse;
 
 const Axios = axios.create({
-    // baseURL: 'http://xxxx',
+    baseURL: 'http://121.40.243.225:8082/',
     timeout: 2000,
     params: {
         token
@@ -29,14 +29,8 @@ Axios.interceptors.request.use(
 Axios.interceptors.response.use(
     (response) => {
         //处理响应数据
-        const res: Response = response.data;
-        if(res.success){
-            return res.content;
-        }
-        else{
-            console.log(res.message);
-            throw Error(res.message);
-        }
+        const res = response.data;
+        return res;
     },
     (error) => {
         //错误处理
