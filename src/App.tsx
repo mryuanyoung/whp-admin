@@ -18,7 +18,7 @@ const AccountPage = lazy(() => import('./pages/Account/index'));
 const ChemicalsPage = lazy(() => import('./pages/Chemicals/index'));
 const EnterpriseInfoPage = lazy(() => import('./pages/EntInfo/index'));
 const EnterpriseAdministratorsPage = lazy(() => import('./pages/EntAdmins/index'));
-const EnterpriseMembersPage = lazy(() => import('./pages/EntMembers/index'));
+// const EnterpriseMembersPage = lazy(() => import('./pages/EntMembers/index'));
 const TransferPage = lazy(() => import('./pages/Transfer/index'));
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -84,9 +84,11 @@ function App() {
                                     <Suspense fallback={<Spin></Spin>}>
                                         <Route path='/alarm' exact><AlarmPage /></Route>
                                         <Route path='/entinfo' exact><EnterpriseInfoPage /></Route>
-                                        <Route path='/entadmins' exact><EnterpriseAdministratorsPage /></Route>
+                                        <Route path='/entadmins' exact><EnterpriseAdministratorsPage type={2}/></Route>
                                         <Route path='/chemicals' exact><ChemicalsPage /></Route>
-                                        <Route path='/entmembers' exact><EnterpriseMembersPage /></Route>
+                                        {/* 企业成员页面目前和管理员页面一致，复用管理员页面 */}
+                                        {/* <Route path='/entmembers' exact><EnterpriseMembersPage /></Route> */}
+                                        <Route path='/entmembers' exact><EnterpriseAdministratorsPage type={1}/></Route>
                                         <Route path='/transfer' exact><TransferPage /></Route>
                                         <Route path='/account' eaxct><AccountPage /></Route>
                                     </Suspense>
