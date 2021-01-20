@@ -3,13 +3,11 @@ export interface Response {
     message: string,
     content: any,
 }
-
 export interface PageParam {
     page: number,
     limit: number,
 }
 
-export interface ListResponse<T> {
+export interface ListResponse<T> extends Response{
     total: number,
-    data: Array<T>,
 }

@@ -27,7 +27,6 @@ const LoginBox = () => {
         else{
             message.error('邮箱或密码错误!', 1);
         }
-        setLoading(false);
     };
 
     return (

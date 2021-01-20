@@ -8,13 +8,15 @@ import {
     SwapOutlined,
     TeamOutlined,
     UserOutlined,
+    GoogleOutlined,
 } from '@ant-design/icons';
-import { UserType, typeMD5 } from './constant/admin';
+import { UserType } from './constant/admin';
 import { LoginResponse } from './interface/account';
 import AlarmPage from './pages/Alarm/index';
 import LoginPage from './pages/Login/index';
 const AccountPage = lazy(() => import('./pages/Account/index'));
 const ChemicalsPage = lazy(() => import('./pages/Chemicals/index'));
+const EnterpriseInfoPage = lazy(() => import('./pages/EntInfo/index'));
 const EnterpriseAdministratorsPage = lazy(() => import('./pages/EntAdmins/index'));
 const EnterpriseMembersPage = lazy(() => import('./pages/EntMembers/index'));
 const TransferPage = lazy(() => import('./pages/Transfer/index'));
@@ -59,20 +61,21 @@ function App() {
                                     {
                                         userInfo.type === UserType.SADMIN ? (
                                             <>
-                                                <Menu.Item key="2" icon={<TeamOutlined />}><Link to='/entadmins'>企业管理员</Link></Menu.Item>
-                                                <Menu.Item key="3" icon={<ExperimentOutlined />}><Link to='/chemicals'>化学品</Link></Menu.Item>
+                                                <Menu.Item key="2" icon={<GoogleOutlined />}><Link to='/entinfo'>企业信息</Link></Menu.Item>
+                                                <Menu.Item key="3" icon={<TeamOutlined />}><Link to='/entadmins'>企业管理员</Link></Menu.Item>
+                                                <Menu.Item key="4" icon={<ExperimentOutlined />}><Link to='/chemicals'>化学品</Link></Menu.Item>
                                             </>
                                         ) : null
                                     }
                                     {
                                         userInfo.type === UserType.EADMIN ? (
                                             <>
-                                                <Menu.Item key="4" icon={<TeamOutlined />}><Link to='/entmembers'>企业成员</Link></Menu.Item>
-                                                <Menu.Item key="5" icon={<SwapOutlined />}><Link to='/transfer'>流转信息</Link></Menu.Item>
+                                                <Menu.Item key="5" icon={<TeamOutlined />}><Link to='/entmembers'>企业成员</Link></Menu.Item>
+                                                <Menu.Item key="6" icon={<SwapOutlined />}><Link to='/transfer'>流转信息</Link></Menu.Item>
                                             </>
                                         ) : null
                                     }
-                                    <Menu.Item key="6" icon={<UserOutlined />}><Link to='/account'>个人中心</Link></Menu.Item>
+                                    <Menu.Item key="7" icon={<UserOutlined />}><Link to='/account'>个人中心</Link></Menu.Item>
                                 </Menu>
                             </Sider>
                             <Layout className="site-layout">
@@ -80,6 +83,7 @@ function App() {
                                 <Content className="site-layout-background" style={{ margin: '24px 16px', padding: 24, textAlign: 'center' }}>
                                     <Suspense fallback={<Spin></Spin>}>
                                         <Route path='/alarm' exact><AlarmPage /></Route>
+                                        <Route path='/entinfo' exact><EnterpriseInfoPage /></Route>
                                         <Route path='/entadmins' exact><EnterpriseAdministratorsPage /></Route>
                                         <Route path='/chemicals' exact><ChemicalsPage /></Route>
                                         <Route path='/entmembers' exact><EnterpriseMembersPage /></Route>

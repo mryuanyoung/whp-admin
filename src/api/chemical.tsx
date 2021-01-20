@@ -11,8 +11,10 @@ export const getChemicalList = async (param: ChemicalParam): Promise<ChemicalLis
     catch (error) {
         console.log(error);
         return {
+            message: '',
+            success: true,
             total: 43,
-            data: [{
+            content: [{
                 "id": 48,
                 "cn_name": "1,2-环氧丙烷",
                 "en_name": "1,2-epoxypropane|propylene oxide|methyloxirane",
