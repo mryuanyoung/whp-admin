@@ -6,8 +6,6 @@ import { ChemicalForm } from '../../interface/chemical';
 import ChemicalDetail from '../../components/ChemicalDetail/index';
 import ChemicalAddition from '../../components/ChemicalAddition';
 import style from './index.module.scss';
-import {INVALID_LOGIN_MSG} from '../../constant/index';
-import {UserInfoCtx} from '../../App';
 import { FieldTimeOutlined, ExperimentOutlined, EditOutlined, RedoOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
@@ -47,7 +45,7 @@ const ChemicalsPage: React.FC = () => {
         else {
             message.error(msg, 1);
         }
-        setLoading(false)
+        setLoading(false);
     }, []);
 
     useEffect(() => {
@@ -100,6 +98,7 @@ const ChemicalsPage: React.FC = () => {
                 sticky
                 dataSource={data}
                 pagination={{
+                    hideOnSinglePage: true,
                     position: ['bottomCenter'],
                     showQuickJumper: true,
                     total
@@ -107,6 +106,7 @@ const ChemicalsPage: React.FC = () => {
                 onChange={(pagination, filters, sorter, extra) => {
                     setPage(pagination.current || 1);
                     getList({ page: pagination.current, key: searchStr || null });
+                    document.documentElement.scrollTop = 0
                 }}
             >
                 <Column

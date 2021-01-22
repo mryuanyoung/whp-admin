@@ -4,8 +4,6 @@ import { Table, Space, message, Modal } from 'antd';
 import { EnterpriseInfoID } from '../../interface/enterprise';
 import { getEntInfoList, deleteEntInfo } from '../../api/entInfo';
 import { PAGELIMIT } from '../../constant/index';
-import {INVALID_LOGIN_MSG} from '../../constant/index';
-import {UserInfoCtx} from '../../App';
 import { GoogleOutlined, AlignLeftOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
@@ -29,17 +27,17 @@ const EnterpriseTable: React.FC<Props> = (props) => {
         const { success, message: msg, total, content: list } = await getEntInfoList({ page, limit });
         if (success) {
             setTotal(total);
-            if (data.length === 0) {
-                list.length = total;
-                setData(list);
-            }
-            else {
-                setData((data) => {
+            setData((data) => {
+                if (data.length === 0) {
+                    list.length = total;
+                    return list;
+                }
+                else {
                     data.length = total;
-                    data.splice((page - 1) * limit, limit, ...list)
-                    return data;
-                });
-            }
+                    data.splice((page - 1) * limit, limit, ...list);
+                    return [...data];
+                }
+            })
             // message.success(msg, 1);
         }
         else {
@@ -79,6 +77,7 @@ const EnterpriseTable: React.FC<Props> = (props) => {
                 sticky
                 dataSource={data}
                 pagination={{
+                    hideOnSinglePage: true,
                     position: ['bottomCenter'],
                     showQuickJumper: true,
                     total

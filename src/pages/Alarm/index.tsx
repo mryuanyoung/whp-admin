@@ -8,7 +8,6 @@ import { AlarmInfo, HandleAlaramParam } from '../../interface/alarm';
 import AlarmItem from '../../components/AlarmItem/index';
 import moment from 'moment';
 import style from './index.module.scss';
-import {INVALID_LOGIN_MSG} from '../../constant/index';
 import { FieldTimeOutlined, ExperimentOutlined, EditOutlined, RedoOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
@@ -27,20 +26,20 @@ const AlarmPage = () => {
         const { success, message: msg, content: list, total } = await getAlarmList({ page, limit })
         if (success) {
             setTotal(total);
-            if (data.length === 0) {
-                list.length = total;
-                setData(list);
-            }
-            else {
-                setData((data) => {
+            setData((data) => {
+                if (data.length === 0) {
+                    list.length = total;
+                    return list;
+                }
+                else {
                     data.length = total;
-                    return data;
-                })
-                setData(data.splice((page - 1) * limit, limit, ...list))
-            }
+                    data.splice((page - 1) * limit, limit, ...list);
+                    return [...data];
+                }
+            })
             // message.success(msg, 1);
         }
-        else{
+        else {
             message.error(msg, 1);
         }
         setLoading(false)
@@ -63,6 +62,7 @@ const AlarmPage = () => {
             sticky
             dataSource={data}
             pagination={{
+                hideOnSinglePage: true,
                 position: ['bottomCenter'],
                 showQuickJumper: true,
                 total

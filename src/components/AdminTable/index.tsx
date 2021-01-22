@@ -4,8 +4,6 @@ import { getAdminList, deleteAdmin } from '../../api/admin';
 import { PAGELIMIT } from '../../constant/index';
 import { AdminInfo } from '../../interface/admin';
 import { ModalProps } from '../../pages/EntAdmins/index';
-import {INVALID_LOGIN_MSG} from '../../constant/index';
-import {UserInfoCtx} from '../../App';
 import { GoogleOutlined, AlignLeftOutlined, ApartmentOutlined, MailOutlined, SettingOutlined, UserOutlined, GoldOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
@@ -31,17 +29,17 @@ const AdminTable: React.FC<Props> = (props) => {
         const { success, message: msg, total, content: list } = await getAdminList({ type: t, page, limit });
         if (success) {
             setTotal(total);
-            if (data.length === 0) {
-                list.length = total;
-                setData(list);
-            }
-            else {
-                setData((data) => {
+            setData((data) => {
+                if (data.length === 0) {
+                    list.length = total;
+                    return list;
+                }
+                else {
                     data.length = total;
-                    return data;
-                })
-                setData(data.splice((page - 1) * limit, limit, ...list))
-            }
+                    data.splice((page - 1) * limit, limit, ...list);
+                    return [...data];
+                }
+            })
             // message.success(msg, 1);
         }
         else {
@@ -80,6 +78,7 @@ const AdminTable: React.FC<Props> = (props) => {
                 sticky
                 dataSource={data}
                 pagination={{
+                    hideOnSinglePage: true,
                     position: ['bottomCenter'],
                     showQuickJumper: true,
                     total
