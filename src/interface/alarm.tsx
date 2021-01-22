@@ -1,4 +1,4 @@
-import {ListResponse} from './index';
+import {ListResponse, Response} from './index';
 
 export interface AlarmInfo {
     id: number,
@@ -17,7 +17,9 @@ export interface AlarmInfo {
     modifyTime: string,
 }
 
-export type AlarmList = ListResponse<AlarmInfo>;
+export type AlarmDetail = Response<AlarmInfo>
+
+export type AlarmList = ListResponse<Array<AlarmInfo>>;
 
 export interface HandleAlaramParam {
     alarmId: number,

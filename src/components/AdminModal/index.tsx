@@ -7,7 +7,8 @@ import style from './index.module.scss';
 
 interface Props {
     modalProps: ModalProps,
-    setModalProps: Dispatch<SetStateAction<ModalProps>>
+    setModalProps: Dispatch<SetStateAction<ModalProps>>,
+    setFresh: () => void,
 }
 
 interface Company {
@@ -28,19 +29,8 @@ const getTitle = (type: [number, number]): string => {
     return t;
 }
 
-// const formItemLayout = {
-//     labelCol: {
-//         xs: { span: 24 },
-//         sm: { span: 8 },
-//     },
-//     wrapperCol: {
-//         xs: { span: 24 },
-//         sm: { span: 16 },
-//     },
-// };
-
 const AdminModal: React.FC<Props> = (props) => {
-    const { modalProps, setModalProps } = props;
+    const { modalProps, setModalProps, setFresh } = props;
     const { visible, type, initDate } = modalProps;
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState<Array<Option>>([]);
@@ -69,6 +59,7 @@ const AdminModal: React.FC<Props> = (props) => {
             await updateAdmin({ ...value, company_id: company.id, type: type[1], id: initDate!.id })
         }
         setLoading(false);
+        setFresh();
     };
 
     //todo 防抖
@@ -81,7 +72,6 @@ const AdminModal: React.FC<Props> = (props) => {
         setCompany({ name: option.value, id: option.id });
     };
 
-
     return (
         <Modal
             footer={null}
@@ -93,7 +83,6 @@ const AdminModal: React.FC<Props> = (props) => {
             destroyOnClose
         >
             <Form
-                // {...formItemLayout}
                 onFinish={onFinish}
                 initialValues={initDate}
                 scrollToFirstError

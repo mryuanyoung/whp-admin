@@ -26,4 +26,4 @@ export interface AdminForm extends BaseAdmin {
 }
 
 
-export type AdminListResponse = ListResponse<AdminInfo>;
+export type AdminListResponse = ListResponse<Array<AdminInfo>>;

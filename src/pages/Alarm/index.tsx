@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
-import {UserInfoCtx} from '../../App';
+import { UserInfoCtx } from '../../App';
 import { Table, Tag, Select, message } from 'antd';
 import { getAlarmList, handleAlaram } from '../../api/alarm';
 import { PAGELIMIT } from '../../constant/index';
@@ -7,6 +7,8 @@ import { AlarmState, TagColors } from '../../constant/alarm';
 import { AlarmInfo, HandleAlaramParam } from '../../interface/alarm';
 import AlarmItem from '../../components/AlarmItem/index';
 import moment from 'moment';
+import style from './index.module.scss';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
 import { FieldTimeOutlined, ExperimentOutlined, EditOutlined, RedoOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
@@ -14,39 +16,39 @@ const { Option } = Select;
 
 const AlarmPage = () => {
 
-    const {userInfo} = useContext(UserInfoCtx);
+    const { userInfo } = useContext(UserInfoCtx);
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
     const [data, setData] = useState<Array<AlarmInfo>>([]);
     const [page, setPage] = useState(1);
 
-    const getList = useCallback(({ page, limit = PAGELIMIT }) => {
+    const getList = useCallback(async ({ page, limit = PAGELIMIT }) => {
         setLoading(true);
-        getAlarmList({ page, limit })
-            .then(({ total, content: list }) => {
-                setTotal(total);
-                if (data.length === 0) {
-                    list.length = total;
-                    setData(list);
-                }
-                else {
-                    setData((data) => {
-                        data.length = total;
-                        return data;
-                    })
-                    setData(data.splice((page - 1) * limit, limit, ...list))
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                message.error('网络错误请稍后重试', 2);
-            })
-            .finally(() => setLoading(false))
+        const { success, message: msg, content: list, total } = await getAlarmList({ page, limit })
+        if (success) {
+            setTotal(total);
+            if (data.length === 0) {
+                list.length = total;
+                setData(list);
+            }
+            else {
+                setData((data) => {
+                    data.length = total;
+                    return data;
+                })
+                setData(data.splice((page - 1) * limit, limit, ...list))
+            }
+            // message.success(msg, 1);
+        }
+        else{
+            message.error(msg, 1);
+        }
+        setLoading(false)
     }, []);
 
-    const changeState = useCallback(async(param: HandleAlaramParam) => {
+    const changeState = useCallback(async (param: HandleAlaramParam) => {
         await handleAlaram(param);
-        await getList({page});
+        await getList({ page });
         message.success('成功更新状态!', 2);
     }, []);
 
@@ -56,7 +58,7 @@ const AlarmPage = () => {
 
     return (
         <Table
-            rowKey='title'
+            rowKey='id'
             loading={loading}
             sticky
             dataSource={data}
@@ -106,8 +108,8 @@ const AlarmPage = () => {
                 title={<><SettingOutlined /><br /><span>操作</span></>}
                 key="action"
                 render={(text: AlarmInfo) => (
-                    <Select defaultValue={text.state} style={{ width: '6.2rem' }} onChange={(v)=> changeState({alarmId: text.id, state: v, managerId: parseInt(userInfo.id) })}>  
-                        {[1,2,3,4].map((item => <Option value={item} disabled={text.state === item} key={item}>{AlarmState[item]}</Option>))}
+                    <Select defaultValue={text.state} style={{ width: '6.2rem' }} onChange={(v) => changeState({ alarmId: text.id, state: v, managerId: parseInt(userInfo.id) })}>
+                        {[1, 2, 3, 4].map((item => <Option value={item} disabled={text.state === item} key={item}>{AlarmState[item]}</Option>))}
                     </Select>
                 )}
             />

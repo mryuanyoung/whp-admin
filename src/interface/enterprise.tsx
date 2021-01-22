@@ -9,5 +9,5 @@ export interface EnterpriseInfoID extends EnterpriseInfo{
     id: number,
 };
 
-export type EntInfoResponse = ListResponse<EnterpriseInfoID>
+export type EntInfoResponse = ListResponse<Array<EnterpriseInfoID>>
 

@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined, EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
 import { LoginForm } from '../../interface/account';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
 import style from './index.module.scss';
 
 const LoginBox = () => {
@@ -15,17 +16,18 @@ const LoginBox = () => {
 
     const onFinish = async function(values: LoginForm){
         setLoading(true);
-        const userInfo = await loginApi(values);
-        if(userInfo.token){
+        const {success, content, message: msg} = await loginApi(values);
+        if(success){
             //todo 编解码
-            localStorage.setItem('u', encodeURI(JSON.stringify(userInfo)));
-            setUserInfo(userInfo);
-            updateAxios(userInfo.token);
-            message.success('登录成功!', 1);
+            localStorage.setItem('u', encodeURI(JSON.stringify(content)));
+            setUserInfo(content);
+            updateAxios(content.token);
+            message.success(`${content.name}: 欢迎回来!`, 1);
             history.push('/');
         }
         else{
-            message.error('邮箱或密码错误!', 1);
+            message.error(msg, 1);
+            setLoading(false);
         }
     };
 

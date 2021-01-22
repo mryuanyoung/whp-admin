@@ -1,9 +1,11 @@
 import React, { Dispatch, SetStateAction, useState, useEffect, useCallback } from 'react';
 import { ModalProps } from '../../pages/EntInfo';
-import { Table, Space, Select, Modal } from 'antd';
+import { Table, Space, message, Modal } from 'antd';
 import { EnterpriseInfoID } from '../../interface/enterprise';
 import { getEntInfoList, deleteEntInfo } from '../../api/entInfo';
 import { PAGELIMIT } from '../../constant/index';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
+import {UserInfoCtx} from '../../App';
 import { GoogleOutlined, AlignLeftOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
@@ -24,19 +26,24 @@ const EnterpriseTable: React.FC<Props> = (props) => {
 
     const getList = useCallback(async ({ page, limit = PAGELIMIT }) => {
         setLoading(true);
-        const { total, content: list } = await getEntInfoList({ page, limit });
-        console.log(total, list);
-        setTotal(total);
-        if (data.length === 0) {
-            list.length = total;
-            setData(list);
+        const { success, message: msg, total, content: list } = await getEntInfoList({ page, limit });
+        if (success) {
+            setTotal(total);
+            if (data.length === 0) {
+                list.length = total;
+                setData(list);
+            }
+            else {
+                setData((data) => {
+                    data.length = total;
+                    data.splice((page - 1) * limit, limit, ...list)
+                    return data;
+                });
+            }
+            // message.success(msg, 1);
         }
         else {
-            setData((data) => {
-                data.length = total;
-                data.splice((page - 1) * limit, limit, ...list)
-                return data;
-            });
+            message.error(msg, 1);
         }
         setLoading(false);
     }, []);
@@ -101,8 +108,8 @@ const EnterpriseTable: React.FC<Props> = (props) => {
                     render={(text: EnterpriseInfoID) => {
                         return (
                             <Space size='small'>
-                                <a onClick={() => handleUpdateModal(text)}>更新</a>
-                                <a onClick={() => handleDelete(text.id)}>删除</a>
+                                <a onClick={(e) => { e.preventDefault(); handleUpdateModal(text) }}>更新</a>
+                                <a onClick={(e) => { e.preventDefault(); handleDelete(text.id) }}>删除</a>
                             </Space>
                         )
                     }}

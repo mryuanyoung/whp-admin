@@ -7,8 +7,8 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Drawer, Divider, Col, Row, Anchor, Typography, message } from 'antd';
 import { ChemicalForm } from '../../interface/chemical';
 import style from './index.module.scss';
-import {updateChemical} from '../../api/chemical';
-import {Titles} from '../../constant/chemical';
+import { updateChemical } from '../../api/chemical';
+import { Titles } from '../../constant/chemical';
 
 const { Link } = Anchor;
 const { Text } = Typography;
@@ -37,7 +37,7 @@ const DescriptionItem: React.FC<ItemProps> = ({ title, content, attr, id }) => {
                 onStart: () => {
                     console.log('start')
                 },
-                onChange: async(s) => {
+                onChange: async (s) => {
                     console.log('change:    ', s)
                     setCont(s);
                     await updateChemical({
@@ -57,7 +57,7 @@ const ChemicalDetail: React.FC<Props> = (props) => {
 
     return (
         <Drawer
-            // destroyOnClose
+            destroyOnClose
             className='DETAIL'
             width='60vw'
             placement="right"
@@ -68,7 +68,7 @@ const ChemicalDetail: React.FC<Props> = (props) => {
                 display: 'flex'
             }}
         >
-            
+
             <div id={style.left}>
                 <Anchor getContainer={() => document.querySelector('.DETAIL .ant-drawer-body') as HTMLElement}>
                     {

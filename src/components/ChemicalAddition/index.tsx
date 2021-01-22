@@ -4,6 +4,8 @@ import { ChemicalInfo } from '../../interface/chemical';
 import style from './index.module.scss';
 import { addChemical } from '../../api/chemical';
 import { Titles, Items, ContentType } from '../../constant/chemical';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
+import {UserInfoCtx} from '../../App';
 const { Title } = Typography;
 
 const { TextArea } = Input;
@@ -56,13 +58,14 @@ const Contents = Items.map((item, idx) => (
 interface Props {
     visible: boolean,
     setVisible: Dispatch<SetStateAction<boolean>>,
+    setFresh: () => void,
 }
 
 const STEP = Math.floor(100 / 19);
 
 const ChemicalAddition: React.FC<Props> = (props) => {
 
-    const { visible, setVisible } = props;
+    const { visible, setVisible, setFresh } = props;
     const [current, setCurrent] = React.useState(0);
     const [percent, setPercent] = useState(STEP * 2);
     const [submitForm, setSubmitForm] = useState({});
@@ -88,11 +91,13 @@ const ChemicalAddition: React.FC<Props> = (props) => {
         addChemical(submitForm as ChemicalInfo)
             .then(() => {
                 message.success('成功添加化学品', 2);
+                setLoading(false);
+                setVisible(false);
+                setFresh();
             }).catch((error) => {
                 message.error('网络错误: ', 2);
-            }).finally(() => {
                 setLoading(false);
-            });
+            })
     };
 
     return (
