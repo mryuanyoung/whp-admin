@@ -6,7 +6,6 @@ import { useHistory } from 'react-router-dom';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined, EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
 import { LoginForm } from '../../interface/account';
-import {INVALID_LOGIN_MSG} from '../../constant/index';
 import style from './index.module.scss';
 
 const LoginBox = () => {
@@ -49,7 +48,7 @@ const LoginBox = () => {
                     },
                 ]}
             >
-                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
+                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder=" 邮箱" />
             </Form.Item>
             <Form.Item
                 name="password"
@@ -63,7 +62,7 @@ const LoginBox = () => {
                 <Input.Password
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                    placeholder="Password"
+                    placeholder=" 密码"
                 />
             </Form.Item>
             <Form.Item>

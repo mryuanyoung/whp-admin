@@ -83,7 +83,7 @@ function App() {
                             </Sider>
                             <Layout className="site-layout">
                                 <Header className="site-layout-background" style={{ padding: 0 }} ></Header>
-                                <Content className="site-layout-background" style={{ margin: '24px 16px', padding: 24, textAlign: 'center' }}>
+                                <Content className="site-layout-background" style={{ margin: '16px 8px', padding: 16, textAlign: 'center' }}>
                                     <Suspense fallback={<Spin></Spin>}>
                                         <Route path='/' exact><Home /></Route>
                                         <Route path='/alarm' exact><AlarmPage /></Route>
@@ -97,7 +97,7 @@ function App() {
                                         <Route path='/account' eaxct><AccountPage /></Route>
                                     </Suspense>
                                 </Content>
-                                <Footer style={{ textAlign: 'center' }}>...</Footer>
+                                <Footer style={{ textAlign: 'center', padding: '10px' }}>...</Footer>
                             </Layout>
                         </Layout>
                     </Route>

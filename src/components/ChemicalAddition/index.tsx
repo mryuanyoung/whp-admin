@@ -4,8 +4,6 @@ import { ChemicalInfo } from '../../interface/chemical';
 import style from './index.module.scss';
 import { addChemical } from '../../api/chemical';
 import { Titles, Items, ContentType } from '../../constant/chemical';
-import {INVALID_LOGIN_MSG} from '../../constant/index';
-import {UserInfoCtx} from '../../App';
 const { Title } = Typography;
 
 const { TextArea } = Input;

@@ -1,8 +1,9 @@
 import React from 'react';
 
 const Home: React.FC = () => {
+
     return (
-        <div>欢迎使用高危化学品管理系统</div>
+        <h1>欢迎使用高关注化学品管理系统</h1>
     );
 };
 
