@@ -20,13 +20,14 @@ const EnterpriseAdministratorsPage: React.FC<Props> = (props) => {
     const { type } = props;
 
     const [modalProps, setModalProps] = useState<ModalProps>({ visible: false, type: [0, type] });
+    const [fresh, setFresh] = useState(false);
 
     return (
         <div id={style.container}>
             <Button id={style.addAdmin} type='primary' onClick={() => setModalProps({ ...modalProps, visible: true })}>新 增</Button>
             <Divider />
-            <AdminTable type={type} setModalProps={setModalProps} />
-            <AdminModal modalProps={modalProps} setModalProps={setModalProps} />
+            <AdminTable type={type} setModalProps={setModalProps} fresh={fresh} />
+            <AdminModal modalProps={modalProps} setModalProps={setModalProps} setFresh={(): void => { setFresh((b) => !b)}} />
         </div>
     );
 };

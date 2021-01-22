@@ -24,3 +24,6 @@ yarn-error.log*
 
 #count code lines
 countLines.js
+
+#nginx
+nginx.conf

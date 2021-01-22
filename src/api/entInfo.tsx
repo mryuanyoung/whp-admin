@@ -6,7 +6,6 @@ export const getEntInfoList = async(param: PageParam): Promise<EntInfoResponse> 
     const res: EntInfoResponse = await Axios.get('/web/getCompanyList', {
         params: param
     });
-    console.log(res);
     return res;
 }
 

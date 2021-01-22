@@ -1,23 +1,25 @@
 import React, { useState, useContext, useCallback, useEffect, Dispatch, SetStateAction } from 'react';
-import { UserInfoCtx } from '../../App';
-import { Table, Space, Select, Modal } from 'antd';
+import { Table, Space, message, Modal } from 'antd';
 import { getAdminList, deleteAdmin } from '../../api/admin';
 import { PAGELIMIT } from '../../constant/index';
 import { AdminInfo } from '../../interface/admin';
 import { ModalProps } from '../../pages/EntAdmins/index';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
+import {UserInfoCtx} from '../../App';
 import { GoogleOutlined, AlignLeftOutlined, ApartmentOutlined, MailOutlined, SettingOutlined, UserOutlined, GoldOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
 
 interface Props {
     type: number,
+    fresh: boolean,
     setModalProps: Dispatch<SetStateAction<ModalProps>>
 }
 
 const AdminTable: React.FC<Props> = (props) => {
 
     const [modal, contextHolder] = Modal.useModal();
-    const { type, setModalProps } = props;
+    const { type, setModalProps, fresh } = props;
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
     const [data, setData] = useState<Array<AdminInfo>>([]);
@@ -25,18 +27,25 @@ const AdminTable: React.FC<Props> = (props) => {
 
     const getList = useCallback(async ({ page, limit = PAGELIMIT }) => {
         setLoading(true);
-        const { total, data: list } = await getAdminList({ type, page, limit });
-        setTotal(total);
-        if (data.length === 0) {
-            list.length = total;
-            setData(list);
+        const t = type === 1 ? 0 : 1;
+        const { success, message: msg, total, content: list } = await getAdminList({ type: t, page, limit });
+        if (success) {
+            setTotal(total);
+            if (data.length === 0) {
+                list.length = total;
+                setData(list);
+            }
+            else {
+                setData((data) => {
+                    data.length = total;
+                    return data;
+                })
+                setData(data.splice((page - 1) * limit, limit, ...list))
+            }
+            // message.success(msg, 1);
         }
         else {
-            setData((data) => {
-                data.length = total;
-                return data;
-            })
-            setData(data.splice((page - 1) * limit, limit, ...list))
+            message.error(msg, 1);
         }
         setLoading(false);
     }, []);
@@ -61,7 +70,7 @@ const AdminTable: React.FC<Props> = (props) => {
 
     useEffect(() => {
         getList({ page: 1 });
-    }, []);
+    }, [fresh]);
 
     return (
         <>
@@ -124,8 +133,8 @@ const AdminTable: React.FC<Props> = (props) => {
                     render={(text: AdminInfo) => {
                         return (
                             <Space size='small'>
-                                <a onClick={() => handleUpdateModal(text)}>更新</a>
-                                <a onClick={() => handleDelete(text.id)}>删除</a>
+                                <a onClick={(e) => { e.preventDefault(); handleUpdateModal(text) }}>更新</a>
+                                <a onClick={(e) => { e.preventDefault(); handleDelete(text.id) }}>删除</a>
                             </Space>
                         )
                     }}

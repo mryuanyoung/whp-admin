@@ -1,17 +1,21 @@
 import React from 'react';
 import ChangePwdBox from '../../components/ChangePwdBox/index';
+import UserInfo from '../../components/UserInfo';
 import style from './index.module.scss';
-import {Divider, Typography} from 'antd';
+import { Tabs } from 'antd';
 
-const {Title} = Typography;
+const { TabPane } = Tabs;
 
 const AccountPage = () => {
   return (
-      <div >
-          <Title level={4} style={{textAlign: 'initial'}}>修改密码</Title>
-          <Divider/>
-          <ChangePwdBox />
-      </div>
+    <Tabs defaultActiveKey="1">
+      <TabPane tab='账号信息' key="1">
+        <UserInfo />
+      </TabPane>
+      <TabPane tab="修改密码" key="2">
+        <ChangePwdBox />
+      </TabPane>
+    </Tabs>
   );
 };
 

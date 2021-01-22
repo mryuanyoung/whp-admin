@@ -94,4 +94,4 @@ export interface updateForm {
     [key: string]: any
 }
 
-export type ChemicalList = ListResponse<ChemicalForm>
+export type ChemicalList = ListResponse<Array<ChemicalForm>>

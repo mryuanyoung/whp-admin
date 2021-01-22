@@ -11,9 +11,11 @@ import {
     GoogleOutlined,
 } from '@ant-design/icons';
 import { UserType } from './constant/admin';
-import { LoginResponse } from './interface/account';
-import AlarmPage from './pages/Alarm/index';
+import {MENU} from './constant/index';
+import { UserInfo } from './interface/account';
 import LoginPage from './pages/Login/index';
+import Home from './components/Home';
+const AlarmPage = lazy(() => import('./pages/Alarm/index'));
 const AccountPage = lazy(() => import('./pages/Account/index'));
 const ChemicalsPage = lazy(() => import('./pages/Chemicals/index'));
 const EnterpriseInfoPage = lazy(() => import('./pages/EntInfo/index'));
@@ -24,18 +26,19 @@ const TransferPage = lazy(() => import('./pages/Transfer/index'));
 const { Header, Content, Footer, Sider } = Layout;
 
 interface CtxType { 
-    userInfo: LoginResponse,
-    setUserInfo: Dispatch<SetStateAction<LoginResponse>>
+    userInfo: UserInfo,
+    setUserInfo: Dispatch<SetStateAction<UserInfo>>
 }
 
-export const UserInfoCtx = createContext<CtxType>({ userInfo: {} as LoginResponse, setUserInfo: (() => { }) });
+export const UserInfoCtx = createContext<CtxType>({ userInfo: {} as UserInfo, setUserInfo: (() => { }) });
 /**
  *  @desc 根组件，控制路由
  */
 function App() {
     const localU = localStorage.getItem('u') || '{}';
-    const info = (JSON.parse(decodeURI(localU))) as LoginResponse;
-    const [userInfo, setUserInfo] = useState<LoginResponse>(info);
+    const info = (JSON.parse(decodeURI(localU))) as UserInfo;
+    const [userInfo, setUserInfo] = useState<UserInfo>(info);
+    const pathname = document.location.pathname;
 
     return (
         <UserInfoCtx.Provider value={{ userInfo, setUserInfo }}>
@@ -56,7 +59,7 @@ function App() {
                                 width='150'
                             >
                                 <div className="logo" />
-                                <Menu theme="dark" mode="inline" >
+                                <Menu theme="dark" mode="inline" defaultSelectedKeys={[MENU.get(pathname)]}>
                                     <Menu.Item key="1" icon={<WarningOutlined />}><Link to='/alarm'>报警信息</Link></Menu.Item>
                                     {
                                         userInfo.type === UserType.SADMIN ? (
@@ -82,6 +85,7 @@ function App() {
                                 <Header className="site-layout-background" style={{ padding: 0 }} ></Header>
                                 <Content className="site-layout-background" style={{ margin: '24px 16px', padding: 24, textAlign: 'center' }}>
                                     <Suspense fallback={<Spin></Spin>}>
+                                        <Route path='/' exact><Home /></Route>
                                         <Route path='/alarm' exact><AlarmPage /></Route>
                                         <Route path='/entinfo' exact><EnterpriseInfoPage /></Route>
                                         <Route path='/entadmins' exact><EnterpriseAdministratorsPage type={2}/></Route>
@@ -93,7 +97,7 @@ function App() {
                                         <Route path='/account' eaxct><AccountPage /></Route>
                                     </Suspense>
                                 </Content>
-                                <Footer style={{ textAlign: 'center' }}>如有任何问题请联系微信:18280308568</Footer>
+                                <Footer style={{ textAlign: 'center' }}>...</Footer>
                             </Layout>
                         </Layout>
                     </Route>

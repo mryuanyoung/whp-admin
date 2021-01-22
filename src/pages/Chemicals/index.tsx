@@ -1,62 +1,65 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
-import { UserInfoCtx } from '../../App';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Table, Space, message, Modal, Button, Input } from 'antd';
-import { getChemicalList, addChemical, deleteChemical, updateChemical } from '../../api/chemical';
+import { getChemicalList, deleteChemical, } from '../../api/chemical';
 import { PAGELIMIT } from '../../constant/index';
 import { ChemicalForm } from '../../interface/chemical';
 import ChemicalDetail from '../../components/ChemicalDetail/index';
 import ChemicalAddition from '../../components/ChemicalAddition';
 import style from './index.module.scss';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
+import {UserInfoCtx} from '../../App';
 import { FieldTimeOutlined, ExperimentOutlined, EditOutlined, RedoOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
-const {Search} = Input;
+const { Search } = Input;
 
 const ChemicalsPage: React.FC = () => {
-    const { userInfo } = useContext(UserInfoCtx);
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
+    const [fresh, setFresh] = useState(false);
     const [addVisible, setAddVisible] = useState(false);
     const [total, setTotal] = useState(0);
+    const [searchStr, setSearchStr] = useState<string | null>(null);
     const [data, setData] = useState<Array<ChemicalForm>>([]);
     const [page, setPage] = useState(1);
     const [drawerData, setDrawerData] = useState<ChemicalForm>({} as ChemicalForm);
     const [modal, contextHolder] = Modal.useModal();
 
-    const getList = useCallback(({ page, key = null, limit = PAGELIMIT}) => {
+    const getList = useCallback(async ({ page, key = null, limit = PAGELIMIT }) => {
         setLoading(true);
-        getChemicalList({ page, limit, key })
-            .then(({ total, content: list }) => {
-                setTotal(total);
+        const { success, message: msg, content: list, total } = await getChemicalList({ page, limit, key });
+        if (success) {
+            setTotal(total);
+            setData((data) => {
                 if (data.length === 0) {
                     list.length = total;
-                    setData(list);
+                    return list;
                 }
                 else {
-                    setData((data) => {
-                        data.length = total;
-                        return data;
-                    })
-                    setData(data.splice((page - 1) * limit, limit, ...list))
+                    data.length = total;
+                    data.splice((page - 1) * limit, limit, ...list);
+                    //retrun data 不更新视图:useMemo搞的鬼,必须要返回一个新的数组
+                    return [...data];
                 }
             })
-            .catch((error) => {
-                console.log(error);
-                message.error('网络错误请稍后重试', 2);
-            })
-            .finally(() => setLoading(false))
+            // message.success(msg, 1);
+        }
+        else {
+            message.error(msg, 1);
+        }
+        setLoading(false)
     }, []);
 
     useEffect(() => {
         getList({ page: 1 });
-    }, []);
+    }, [fresh]);
 
     const handleDetail = (value: ChemicalForm) => {
-        setDrawerData(value);
         setVisible(true);
+        setDrawerData({ ...value });
     };
 
-    const handleDelete = async(id: number) => {
+    const handleDelete = async (id: number) => {
         modal.confirm({
             title: '确认删除',
             content: `确认删除此化学品?`,
@@ -74,8 +77,10 @@ const ChemicalsPage: React.FC = () => {
         setAddVisible(true);
     };
 
-    const handleSearch = async(value: string) => {
-        getList({page: 1, key: value})
+    const handleSearch = async (value: string) => {
+        setSearchStr(value);
+        setData([]);
+        getList({ page: 1, key: value || null })
     }
 
     return (
@@ -90,7 +95,7 @@ const ChemicalsPage: React.FC = () => {
                 <Button onClick={handleAdd} type='primary'>新增</Button>
             </div>
             <Table
-                rowKey='cas'
+                rowKey='id'
                 loading={loading}
                 sticky
                 dataSource={data}
@@ -101,7 +106,7 @@ const ChemicalsPage: React.FC = () => {
                 }}
                 onChange={(pagination, filters, sorter, extra) => {
                     setPage(pagination.current || 1);
-                    getList({ page: pagination.current });
+                    getList({ page: pagination.current, key: searchStr || null });
                 }}
             >
                 <Column
@@ -140,14 +145,14 @@ const ChemicalsPage: React.FC = () => {
                     key="action"
                     render={(text: ChemicalForm) => (
                         <Space size='small'>
-                            <a onClick={() => handleDetail(text)}>详情</a>
-                            <a onClick={() => handleDelete(text.id)}>删除</a>
+                            <a onClick={(e) => { e.preventDefault(); handleDetail(text) }}>详情</a>
+                            <a onClick={(e) => { e.preventDefault(); handleDelete(text.id) }}>删除</a>
                         </Space>
                     )}
                 />
             </Table>
             <ChemicalDetail visible={visible} setVisible={setVisible} data={drawerData} />
-            <ChemicalAddition visible={addVisible} setVisible={setAddVisible}/>
+            <ChemicalAddition visible={addVisible} setVisible={setAddVisible} setFresh={(): void => { setFresh((b) => !b) }} />
             {contextHolder}
         </div>
     );

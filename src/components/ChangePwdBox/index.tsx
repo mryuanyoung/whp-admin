@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import {changePassword} from '../../api/account';
-import {PasswordForm, LoginResponse} from '../../interface/account';
+import {PasswordForm, UserInfo} from '../../interface/account';
 import {UserInfoCtx} from '../../App';
 import style from './index.module.scss';
 import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
@@ -31,7 +31,7 @@ const ChangePwdBox = () => {
             //清除localStorage,重新登录
             localStorage.removeItem('u');
             setLoding(false);
-            setUserInfo({} as LoginResponse);
+            setUserInfo({} as UserInfo);
         }, 2000);
     };
 

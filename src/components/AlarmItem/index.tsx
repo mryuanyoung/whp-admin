@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { AlarmInfo } from '../../interface/alarm';
 import { getAlarmDetail } from '../../api/alarm';
-import { Descriptions, Spin } from 'antd';
+import { Descriptions, Spin, message } from 'antd';
 import { AlarmState } from '../../constant/alarm';
 import style from './index.module.scss';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
+import {UserInfoCtx} from '../../App';
 
 
 const AlarmItem = (props: { id: number }) => {
@@ -12,10 +14,17 @@ const AlarmItem = (props: { id: number }) => {
     const [detail, setDetail] = useState<AlarmInfo>();
 
     useEffect(() => {
-        getAlarmDetail(props.id).then((res) => {
-            setDetail(res);
-            setLoading(false);
-        });
+        setLoading(true);
+        getAlarmDetail(props.id)
+            .then(({ success, message: msg, content }) => {
+                if (success) {
+                    setDetail(content);
+                }
+                else{
+                    message.error(msg, 1);
+                }
+                setLoading(false);
+            });
     }, []);
 
     return loading ? <Spin /> : (
