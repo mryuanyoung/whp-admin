@@ -1,29 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AlarmInfo } from '../../interface/alarm';
 import { getAlarmDetail } from '../../api/alarm';
 import { Descriptions, Spin, message } from 'antd';
 import { AlarmState } from '../../constant/alarm';
 import style from './index.module.scss';
+import {UserInfoCtx} from '../../App';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
 
+interface Props {
+    id: number,
+    fresh: boolean,
+}
 
-const AlarmItem = (props: { id: number }) => {
+const AlarmItem: React.FC<Props> = (props) => {
 
+    const {id, fresh} = props;
     const [loading, setLoading] = useState(true);
     const [detail, setDetail] = useState<AlarmInfo>();
+    const {setUserInfo} = useContext(UserInfoCtx);
 
     useEffect(() => {
         setLoading(true);
-        getAlarmDetail(props.id)
+        getAlarmDetail(id)
             .then(({ success, message: msg, content }) => {
                 if (success) {
                     setDetail(content);
                 }
                 else{
                     message.error(msg, 1);
+                    if(msg === INVALID_LOGIN_MSG){
+                        setUserInfo({} as any);
+                        localStorage.removeItem('u');
+                    }
                 }
                 setLoading(false);
             });
-    }, []);
+    }, [fresh]);
 
     return loading ? <Spin /> : (
         <div className={style.expand}>

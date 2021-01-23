@@ -1,6 +1,6 @@
 import Axios from '../utils/axios';
-import { AlarmInfo, AlarmList, HandleAlaramParam, AlarmDetail } from '../interface/alarm';
-import { PageParam } from '../interface/index';
+import { AlarmList, HandleAlaramParam, AlarmDetail } from '../interface/alarm';
+import { PageParam, AnyResponse } from '../interface/index';
 
 export const getAlarmList = async (page: PageParam = { page: 1, limit: 10 }): Promise<AlarmList> => {
     const res: AlarmList = await Axios.get('/web/getAlarmList', {
@@ -17,11 +17,7 @@ export const getAlarmDetail = async (alarmId: number): Promise<AlarmDetail> => {
 
 }
 
-export const handleAlaram = async (param: HandleAlaramParam) => {
-    try {
-        await Axios.post('/web/handleAlarm', param);
-    }
-    catch (error) {
-        console.log(error);
-    }
+export const handleAlaram = async (param: HandleAlaramParam): Promise<AnyResponse> => {
+    const res: AnyResponse = await Axios.post('/web/handleAlarm', param);
+    return res;
 }

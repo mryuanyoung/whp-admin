@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction } from 'react';
+import React, { useState } from 'react';
 import AdminTable from '../../components/AdminTable/index';
 import AdminModal from '../../components/AdminModal/index';
 import { Button, Divider } from 'antd';

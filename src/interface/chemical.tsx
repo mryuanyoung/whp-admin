@@ -1,4 +1,3 @@
-import ChemicalDetail from '../components/ChemicalDetail';
 import {ListResponse} from './index';
 
 export interface ChemicalInfo {

@@ -16,12 +16,12 @@ export interface BaseAdmin {
 
 export interface AdminInfo extends BaseAdmin {
     id: number,
-    CompanyName: string,
+    companyName: string,
     description: string,
 }
 
 export interface AdminForm extends BaseAdmin {
-    company_id: number,
+    companyName: string,
     type: number, // 企业用户0 | 管理员1 | 超级管理员2
 }
 

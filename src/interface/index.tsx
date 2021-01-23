@@ -3,6 +3,8 @@ export interface Response<T> {
     message: string,
     content: T,
 }
+
+export type AnyResponse = Response<any>;
 export interface PageParam {
     page: number,
     limit: number,

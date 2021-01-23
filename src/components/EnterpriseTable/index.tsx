@@ -1,10 +1,12 @@
-import React, { Dispatch, SetStateAction, useState, useEffect, useCallback } from 'react';
+import React, { Dispatch, SetStateAction, useState, useEffect, useCallback, useContext } from 'react';
 import { ModalProps } from '../../pages/EntInfo';
 import { Table, Space, message, Modal } from 'antd';
 import { EnterpriseInfoID } from '../../interface/enterprise';
 import { getEntInfoList, deleteEntInfo } from '../../api/entInfo';
 import { PAGELIMIT } from '../../constant/index';
 import { GoogleOutlined, AlignLeftOutlined, SettingOutlined } from '@ant-design/icons';
+import {UserInfoCtx} from '../../App';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
 
 const { Column } = Table;
 
@@ -15,6 +17,7 @@ interface Props {
 
 const EnterpriseTable: React.FC<Props> = (props) => {
 
+    const {setUserInfo} = useContext(UserInfoCtx);
     const [modal, contextHolder] = Modal.useModal();
     const { setModalProps, fresh } = props;
     const [loading, setLoading] = useState(false);
@@ -42,6 +45,10 @@ const EnterpriseTable: React.FC<Props> = (props) => {
         }
         else {
             message.error(msg, 1);
+            if(msg === INVALID_LOGIN_MSG){
+                setUserInfo({} as any);
+                localStorage.removeItem('u');
+            }
         }
         setLoading(false);
     }, []);

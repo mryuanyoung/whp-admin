@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 import { TransferInfo } from '../../interface/transfer';
 import { getTransferList } from '../../api/transfer';
 import { PAGELIMIT } from '../../constant/index';
@@ -7,11 +7,14 @@ import moment from 'moment';
 import style from './index.module.scss';
 import TransferDetail from '../../components/TransferDetail';
 import { TagColors, TransferState } from '../../constant/transfer';
-import { FieldTimeOutlined, ExperimentOutlined, EditOutlined, RedoOutlined, SettingOutlined } from '@ant-design/icons';
+import {UserInfoCtx} from '../../App';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
+import { FieldTimeOutlined, ExperimentOutlined, EditOutlined, RedoOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
 
 const TransferPage: React.FC = () => {
+    const {setUserInfo} = useContext(UserInfoCtx);
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
     const [data, setData] = useState<Array<TransferInfo>>([]);
@@ -37,6 +40,10 @@ const TransferPage: React.FC = () => {
         }
         else {
             message.error(msg, 1);
+            if(msg === INVALID_LOGIN_MSG){
+                setUserInfo({} as any);
+                localStorage.removeItem('u');
+            }
         }
         setLoading(false);
     }, []);

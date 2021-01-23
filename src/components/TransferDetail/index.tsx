@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { TransferInfo } from '../../interface/transfer';
 import { getTransferDetail } from '../../api/transfer';
 import { Descriptions, Spin, message } from 'antd';
 import { TransferState } from '../../constant/transfer';
 import style from './index.module.scss';
+import {UserInfoCtx} from '../../App';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
 
 interface Props {
     id: number,
@@ -11,6 +13,7 @@ interface Props {
 
 const AlarmItem: React.FC<Props> = (props) => {
 
+    const {setUserInfo} = useContext(UserInfoCtx);
     const {id} = props;
     const [loading, setLoading] = useState(true);
     const [detail, setDetail] = useState<TransferInfo>();
@@ -24,6 +27,10 @@ const AlarmItem: React.FC<Props> = (props) => {
                 }
                 else{
                     message.error(msg, 1);
+                    if(msg === INVALID_LOGIN_MSG){
+                        setUserInfo({} as any);
+                        localStorage.removeItem('u');
+                    }
                 }
                 setLoading(false);
             });

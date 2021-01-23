@@ -1,7 +1,7 @@
 import React from 'react';
 import ChangePwdBox from '../../components/ChangePwdBox/index';
 import UserInfo from '../../components/UserInfo';
-import style from './index.module.scss';
+// import style from './index.module.scss';
 import { Tabs } from 'antd';
 
 const { TabPane } = Tabs;

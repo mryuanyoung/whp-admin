@@ -4,6 +4,8 @@ import { getAdminList, deleteAdmin } from '../../api/admin';
 import { PAGELIMIT } from '../../constant/index';
 import { AdminInfo } from '../../interface/admin';
 import { ModalProps } from '../../pages/EntAdmins/index';
+import {UserInfoCtx} from '../../App';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
 import { GoogleOutlined, AlignLeftOutlined, ApartmentOutlined, MailOutlined, SettingOutlined, UserOutlined, GoldOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
@@ -16,6 +18,7 @@ interface Props {
 
 const AdminTable: React.FC<Props> = (props) => {
 
+    const {setUserInfo} = useContext(UserInfoCtx);
     const [modal, contextHolder] = Modal.useModal();
     const { type, setModalProps, fresh } = props;
     const [loading, setLoading] = useState(false);
@@ -44,6 +47,10 @@ const AdminTable: React.FC<Props> = (props) => {
         }
         else {
             message.error(msg, 1);
+            if(msg === INVALID_LOGIN_MSG){
+                setUserInfo({} as any);
+                localStorage.removeItem('u');
+            }
         }
         setLoading(false);
     }, []);
@@ -103,8 +110,8 @@ const AdminTable: React.FC<Props> = (props) => {
                 <Column
                     align='center'
                     title={<><GoogleOutlined /><br /><span>公司</span></>}
-                    dataIndex="CompanyName"
-                    key="CompanyName"
+                    dataIndex="companyName"
+                    key="companyName"
                 />
                 <Column
                     ellipsis

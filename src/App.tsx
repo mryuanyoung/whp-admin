@@ -15,6 +15,7 @@ import {MENU} from './constant/index';
 import { UserInfo } from './interface/account';
 import LoginPage from './pages/Login/index';
 import Home from './components/Home';
+import Img from './font.png';
 const AlarmPage = lazy(() => import('./pages/Alarm/index'));
 const AccountPage = lazy(() => import('./pages/Account/index'));
 const ChemicalsPage = lazy(() => import('./pages/Chemicals/index'));
@@ -59,6 +60,7 @@ function App() {
                                 width='150'
                             >
                                 <div className="logo" />
+                                {/* <img src={Img} className="logo"/> */}
                                 <Menu theme="dark" mode="inline" defaultSelectedKeys={[MENU.get(pathname)]}>
                                     <Menu.Item key="1" icon={<WarningOutlined />}><Link to='/alarm'>报警信息</Link></Menu.Item>
                                     {

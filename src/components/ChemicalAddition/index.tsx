@@ -4,8 +4,10 @@ import { ChemicalInfo } from '../../interface/chemical';
 import style from './index.module.scss';
 import { addChemical } from '../../api/chemical';
 import { Titles, Items, ContentType } from '../../constant/chemical';
-const { Title } = Typography;
+import { UserInfoCtx } from '../../App';
+import { INVALID_LOGIN_MSG } from '../../constant/index';
 
+const { Title } = Typography;
 const { TextArea } = Input;
 
 const FormCtx = React.createContext({} as any);
@@ -63,6 +65,7 @@ const STEP = Math.floor(100 / 19);
 
 const ChemicalAddition: React.FC<Props> = (props) => {
 
+    const { setUserInfo } = useContext(UserInfoCtx);
     const { visible, setVisible, setFresh } = props;
     const [current, setCurrent] = React.useState(0);
     const [percent, setPercent] = useState(STEP * 2);
@@ -86,16 +89,20 @@ const ChemicalAddition: React.FC<Props> = (props) => {
 
     const formFinished = async () => {
         setLoading(true);
-        addChemical(submitForm as ChemicalInfo)
-            .then(() => {
-                message.success('成功添加化学品', 2);
-                setLoading(false);
-                setVisible(false);
-                setFresh();
-            }).catch((error) => {
-                message.error('网络错误: ', 2);
-                setLoading(false);
-            })
+        const { success, message: msg, content } = await addChemical(submitForm as ChemicalInfo);
+        if (success) {
+            message.success('成功添加化学品', 2);
+            setVisible(false);
+            setFresh();
+        }
+        else {
+            message.error(msg, 1);
+            if (msg === INVALID_LOGIN_MSG) {
+                setUserInfo({} as any);
+                localStorage.removeItem('u');
+            }
+        }
+        setLoading(false);
     };
 
     return (

@@ -1,9 +1,13 @@
-import React, { Dispatch, SetStateAction, useCallback, useState } from 'react';
-import { Modal, Form, Input, Button, AutoComplete } from 'antd';
+import React, { Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from 'react';
+import { Modal, Form, Input, Button, AutoComplete, message } from 'antd';
 import { BaseAdmin } from '../../interface/admin';
 import { ModalProps } from '../../pages/EntAdmins/index';
 import { addAdmin, updateAdmin } from '../../api/admin';
+import { getEntInfoList } from '../../api/entInfo';
+import { PAGELIMIT } from '../../constant/index';
 import style from './index.module.scss';
+import { debounce } from '../../utils/debounce';
+import { UserInfoCtx } from '../../App';
 
 interface Props {
     modalProps: ModalProps,
@@ -30,43 +34,86 @@ const getTitle = (type: [number, number]): string => {
 }
 
 const AdminModal: React.FC<Props> = (props) => {
+    const { userInfo } = useContext(UserInfoCtx);
     const { modalProps, setModalProps, setFresh } = props;
     const { visible, type, initDate } = modalProps;
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState<Array<Option>>([]);
     const [company, setCompany] = useState<Company>({} as Company);
 
-    if (initDate) {
-        //有初始值，说明是修改，先查询公司id，不然提交表单没有id
-        // setCompany({name: initDate.CompanyName, id:})
-    }
+
+    const initCompany = useCallback(async (key: string) => {
+        const { success, content: list, message, total } = await getEntInfoList({
+            page: 1,
+            limit: PAGELIMIT,
+            key
+        })
+        if (success && list.length >= 1) {
+            setOptions([{ value: list[0].name, label: list[0].name, id: list[0].id }])
+            setCompany(list[0]);
+        }
+    }, []);
+
+    useEffect(() => {
+        if ((type[0] === 0 && type[1] !== 2)  //新增成员
+            || (type[0] === 1 && type[1] !== 2)) {   //修改成员
+            setCompany({ name: userInfo.companyName, id: -1 })
+        }
+
+        if (type[0] === 1 && type[1] === 2) { //修改管理员
+            initCompany(initDate!.companyName);
+        }
+    }, [initDate, visible]);
 
     const handleCancel = useCallback(() => {
         setModalProps({ ...modalProps, visible: false });
         setCompany({} as Company);
+        setOptions([]);
         setLoading(false);
     }, []);
 
-    const onFinish = async (value: BaseAdmin & { CompanyName: string }) => {
+    const onFinish = async (value: BaseAdmin & { companyName: string }) => {
         console.log(value, company);
         setLoading(true);
-        if (type[0] === 0) {
-            //新增
-            await addAdmin({ ...value, company_id: company.id, type: type[1] });
+
+        const request = type[0] === 0 ? addAdmin : updateAdmin;
+        let param: any = {};
+        if (type[0] === 1) { //修改 添加id
+            param.id = initDate!.id;
+        }
+        param.type = type[1] === 2 ? 1 : 0;
+        if (type[1] !== 2) { //企业成员 手动添加companyName
+            param.companyName = userInfo.companyName;
+        }
+
+        const { success, content, message: msg } = await request({ ...value, ...param });
+        if (success) {
+            message.success(msg, 1);
+            handleCancel();
+            setFresh();
         }
         else {
-            //修改
-            await updateAdmin({ ...value, company_id: company.id, type: type[1], id: initDate!.id })
+            message.error(msg, 1);
         }
         setLoading(false);
-        setFresh();
     };
 
-    //todo 防抖
-    const handleSearch = (value: string) => {
-        console.log('搜索id');
-        setOptions(value ? [{ value: '字节跳动', label: '字节跳动', id: 1 }, { value: '阿里巴巴', label: '阿里巴巴', id: 2 }] : []);
-    };
+    const handleSearch = debounce(async (value: string) => {
+        console.log('搜索id:     ', value);
+        if (!value) return;
+        const { success, content: list, message, total } = await getEntInfoList({
+            page: 1,
+            limit: PAGELIMIT,
+            key: value
+        })
+        if (success && list.length >= 1) {
+            setOptions(list.map(item => ({
+                value: item.name,
+                label: item.name,
+                id: item.id
+            })));
+        }
+    }, 200);
 
     const onSelect = (_: string, option: any) => {
         setCompany({ name: option.value, id: option.id });
@@ -88,21 +135,32 @@ const AdminModal: React.FC<Props> = (props) => {
                 scrollToFirstError
             >
                 <Form.Item
-                    name='CompanyName'
+                    name='companyName'
                     className={style.item}
                     label='公司'
                     rules={[
-                        { required: true, message: '请输入公司名!' },
+                        {
+                            required: true,
+                            validator: (rule, value) => (!value && type[1] === 2) ? Promise.reject() : Promise.resolve(),
+                            message: '请输入公司名',
+                        },
                         {
                             validator: (rule, value) => {
                                 console.log(value, company);
-                                return (company.name && company.name === value) ? Promise.resolve() : Promise.reject()
+                                if (type[1] === 2) {
+                                    return (company.name && company.name === value) ? Promise.resolve() : Promise.reject();
+                                }
+                                else {
+                                    return Promise.resolve();
+                                }
                             },
                             message: '请从下拉框中选择',
                         }
                     ]}
                 >
                     <AutoComplete
+                        defaultValue={type[0] === 0 && type[1] === 2 ? '' : company.name}
+                        disabled={type[1] === 1}
                         dropdownMatchSelectWidth={252}
                         defaultActiveFirstOption={false}
                         options={options}

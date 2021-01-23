@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { Scrollbars } from 'react-custom-scrollbars';
-import ErrorBoundary from './components/ErrorBoundary/index';
+// import ErrorBoundary from './components/ErrorBoundary/index';
 
 ReactDOM.render(
   // <React.StrictMode>

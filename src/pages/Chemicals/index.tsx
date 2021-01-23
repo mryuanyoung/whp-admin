@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { Table, Space, message, Modal, Button, Input } from 'antd';
 import { getChemicalList, deleteChemical, } from '../../api/chemical';
 import { PAGELIMIT } from '../../constant/index';
@@ -6,12 +6,15 @@ import { ChemicalForm } from '../../interface/chemical';
 import ChemicalDetail from '../../components/ChemicalDetail/index';
 import ChemicalAddition from '../../components/ChemicalAddition';
 import style from './index.module.scss';
+import {UserInfoCtx} from '../../App';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
 import { FieldTimeOutlined, ExperimentOutlined, EditOutlined, RedoOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
 const { Search } = Input;
 
 const ChemicalsPage: React.FC = () => {
+    const  {setUserInfo} = useContext(UserInfoCtx);
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
     const [fresh, setFresh] = useState(false);
@@ -44,6 +47,10 @@ const ChemicalsPage: React.FC = () => {
         }
         else {
             message.error(msg, 1);
+            if(msg === INVALID_LOGIN_MSG){
+                setUserInfo({} as any);
+                localStorage.removeItem('u');
+            }
         }
         setLoading(false);
     }, []);

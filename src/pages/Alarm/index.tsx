@@ -8,6 +8,7 @@ import { AlarmInfo, HandleAlaramParam } from '../../interface/alarm';
 import AlarmItem from '../../components/AlarmItem/index';
 import moment from 'moment';
 import style from './index.module.scss';
+import {INVALID_LOGIN_MSG} from '../../constant/index';
 import { FieldTimeOutlined, ExperimentOutlined, EditOutlined, RedoOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
@@ -15,11 +16,12 @@ const { Option } = Select;
 
 const AlarmPage = () => {
 
-    const { userInfo } = useContext(UserInfoCtx);
+    const { userInfo, setUserInfo } = useContext(UserInfoCtx);
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
     const [data, setData] = useState<Array<AlarmInfo>>([]);
     const [page, setPage] = useState(1);
+    const [fresh ,setFresh] = useState(false);
 
     const getList = useCallback(async ({ page, limit = PAGELIMIT }) => {
         setLoading(true);
@@ -41,6 +43,10 @@ const AlarmPage = () => {
         }
         else {
             message.error(msg, 1);
+            if(msg === INVALID_LOGIN_MSG){
+                setUserInfo({} as any);
+                localStorage.removeItem('u');
+            }
         }
         setLoading(false)
     }, []);
@@ -68,8 +74,9 @@ const AlarmPage = () => {
                 total
             }}
             expandable={{
-                expandedRowRender: ({ id }) => <AlarmItem id={id} />,
+                expandedRowRender: ({ id }) => <AlarmItem id={id} fresh={fresh}/>,
                 expandIconColumnIndex: 5,
+                onExpand: (expanded, record) => expanded ? setFresh(b => !b) : null
             }}
             onChange={(pagination, filters, sorter, extra) => {
                 setPage(pagination.current || 1);

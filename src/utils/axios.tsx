@@ -1,7 +1,4 @@
-import React, {useContext} from 'react';
 import axios from 'axios';
-import {INVALID_LOGIN_MSG} from '../constant/index';
-import {UserInfoCtx} from '../App';
 import {UserInfo} from '../interface/account';
 
 const localU = localStorage.getItem('u') || '{}';
@@ -33,14 +30,7 @@ Axios.interceptors.response.use(
     (response) => {
         //处理响应数据
         const res = response.data;
-        if(!res.success && res.message === INVALID_LOGIN_MSG){
-            const user = useContext(UserInfoCtx);
-            user.setUserInfo({} as UserInfo);
-            localStorage.removeItem('u');
-        }
-        else{
-            return res;
-        }
+        return res;
     },
     (error) => {
         //错误处理

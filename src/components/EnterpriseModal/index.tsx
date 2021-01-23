@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { ModalProps } from '../../pages/EntInfo';
-import { Modal, Form, Input, Button, AutoComplete } from 'antd';
+import { Modal, Form, Input, Button } from 'antd';
 import { EnterpriseInfoID, EnterpriseInfo } from '../../interface/enterprise';
 import { addEntInfo, updateEntInfo } from '../../api/entInfo';
 import style from './index.module.scss';
