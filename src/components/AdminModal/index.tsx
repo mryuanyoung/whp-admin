@@ -8,6 +8,8 @@ import { PAGELIMIT } from '../../constant/index';
 import style from './index.module.scss';
 import { debounce } from '../../utils/debounce';
 import { UserInfoCtx } from '../../App';
+import { INVALID_LOGIN_MSG } from '../../constant/index';
+import { updateAxios } from '../../utils/axios';
 
 interface Props {
     modalProps: ModalProps,
@@ -34,7 +36,7 @@ const getTitle = (type: [number, number]): string => {
 }
 
 const AdminModal: React.FC<Props> = (props) => {
-    const { userInfo } = useContext(UserInfoCtx);
+    const { userInfo, setUserInfo } = useContext(UserInfoCtx);
     const { modalProps, setModalProps, setFresh } = props;
     const { visible, type, initDate } = modalProps;
     const [loading, setLoading] = useState(false);
@@ -73,13 +75,14 @@ const AdminModal: React.FC<Props> = (props) => {
     }, []);
 
     const onFinish = async (value: BaseAdmin & { companyName: string }) => {
-        console.log(value, company);
+        // console.log(value, company);
         setLoading(true);
 
         const request = type[0] === 0 ? addAdmin : updateAdmin;
         let param: any = {};
         if (type[0] === 1) { //修改 添加id
             param.id = initDate!.id;
+            // value.email = undefined;
         }
         param.type = type[1] === 2 ? 1 : 0;
         if (type[1] !== 2) { //企业成员 手动添加companyName
@@ -88,30 +91,46 @@ const AdminModal: React.FC<Props> = (props) => {
 
         const { success, content, message: msg } = await request({ ...value, ...param });
         if (success) {
-            message.success(msg, 1);
+            message.success(msg || content, 2);
             handleCancel();
             setFresh();
         }
         else {
-            message.error(msg, 1);
+            const errStr = msg || content;
+            message.error(errStr, 2);
+            if (errStr === INVALID_LOGIN_MSG) {
+                setUserInfo({} as any);
+                localStorage.removeItem('u');
+                updateAxios(null);
+            }
         }
         setLoading(false);
     };
 
     const handleSearch = debounce(async (value: string) => {
-        console.log('搜索id:     ', value);
         if (!value) return;
-        const { success, content: list, message, total } = await getEntInfoList({
+        const { success, content: list, message: msg, total } = await getEntInfoList({
             page: 1,
             limit: PAGELIMIT,
             key: value
         })
-        if (success && list.length >= 1) {
-            setOptions(list.map(item => ({
-                value: item.name,
-                label: item.name,
-                id: item.id
-            })));
+        if (success) {
+            if (list.length >= 1) {
+                setOptions(list.map(item => ({
+                    value: item.name,
+                    label: item.name,
+                    id: item.id
+                })));
+            }
+        }
+        else {
+            const errStr = msg || list;
+            message.error(errStr, 2);
+            if (errStr === INVALID_LOGIN_MSG) {
+                setUserInfo({} as any);
+                localStorage.removeItem('u');
+                updateAxios(null);
+            }
         }
     }, 200);
 
@@ -146,7 +165,7 @@ const AdminModal: React.FC<Props> = (props) => {
                         },
                         {
                             validator: (rule, value) => {
-                                console.log(value, company);
+                                // console.log(value, company);
                                 if (type[1] === 2) {
                                     return (company.name && company.name === value) ? Promise.resolve() : Promise.reject();
                                 }
@@ -208,7 +227,7 @@ const AdminModal: React.FC<Props> = (props) => {
                         },
                     ]}
                 >
-                    <Input onBlur={() => { }} />
+                    <Input disabled={type[0] !== 0} />
                 </Form.Item>
                 <Form.Item
                     className={style.item}

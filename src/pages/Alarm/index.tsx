@@ -42,7 +42,7 @@ const AlarmPage = () => {
             // message.success(msg, 1);
         }
         else {
-            message.error(msg, 1);
+            message.error(msg, 2);
             if(msg === INVALID_LOGIN_MSG){
                 setUserInfo({} as any);
                 localStorage.removeItem('u');

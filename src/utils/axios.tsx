@@ -38,7 +38,7 @@ Axios.interceptors.response.use(
     }
 );
 
-export const updateAxios = (token: string) => {
+export const updateAxios = (token: string | null) => {
     Axios.defaults.params = {token};
 }
 

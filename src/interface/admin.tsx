@@ -8,7 +8,7 @@ export interface AdminList {
 
 export interface BaseAdmin {
     department: string,
-    email: string,
+    email?: string,
     name: string,
     password: string,
     position: string,

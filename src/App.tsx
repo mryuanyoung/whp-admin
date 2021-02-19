@@ -39,7 +39,7 @@ function App() {
     const localU = localStorage.getItem('u') || '{}';
     const info = (JSON.parse(decodeURI(localU))) as UserInfo;
     const [userInfo, setUserInfo] = useState<UserInfo>(info);
-    const pathname = document.location.pathname;
+    const pathname = '/alarm' || document.location.pathname;
 
     return (
         <UserInfoCtx.Provider value={{ userInfo, setUserInfo }}>
@@ -84,7 +84,7 @@ function App() {
                                 </Menu>
                             </Sider>
                             <Layout className="site-layout">
-                                <Header className="site-layout-background" style={{ padding: 0 }} ></Header>
+                                <Header className="site-layout-background" style={{ padding: 0, height: '40px' }} ></Header>
                                 <Content className="site-layout-background" style={{ margin: '16px 8px', padding: 16, textAlign: 'center' }}>
                                     <Suspense fallback={<Spin></Spin>}>
                                         <Route path='/' exact><Home /></Route>

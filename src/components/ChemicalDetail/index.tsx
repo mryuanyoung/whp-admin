@@ -38,7 +38,7 @@ const DescriptionItem: React.FC<ItemProps> = (props) => {
                             id,
                             [attr]: s
                         })
-                        message.success(`成功更新: ${attr}`, 1);
+                        message.success(`成功更新: ${attr}`, 2);
                     }
 
                 }

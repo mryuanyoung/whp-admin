@@ -21,11 +21,11 @@ const LoginBox = () => {
             localStorage.setItem('u', encodeURI(JSON.stringify(content)));
             setUserInfo(content);
             updateAxios(content.token);
-            message.success(`${content.name}: 欢迎回来!`, 1);
+            message.success(`${content.name}: 欢迎回来!`, 2);
             history.push('/');
         }
         else{
-            message.error(msg, 1);
+            message.error(msg, 2);
             setLoading(false);
         }
     };

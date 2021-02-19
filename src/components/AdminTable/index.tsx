@@ -7,6 +7,7 @@ import { ModalProps } from '../../pages/EntAdmins/index';
 import {UserInfoCtx} from '../../App';
 import {INVALID_LOGIN_MSG} from '../../constant/index';
 import { GoogleOutlined, AlignLeftOutlined, ApartmentOutlined, MailOutlined, SettingOutlined, UserOutlined, GoldOutlined } from '@ant-design/icons';
+import {updateAxios} from '../../utils/axios';
 
 const { Column } = Table;
 
@@ -46,7 +47,7 @@ const AdminTable: React.FC<Props> = (props) => {
             // message.success(msg, 1);
         }
         else {
-            message.error(msg, 1);
+            message.error(msg, 2);
             if(msg === INVALID_LOGIN_MSG){
                 setUserInfo({} as any);
                 localStorage.removeItem('u');
@@ -67,8 +68,20 @@ const AdminTable: React.FC<Props> = (props) => {
             cancelText: '取消',
             onOk: async () => {
                 setLoading(true);
-                await deleteAdmin(id);
-                await getList({ page });
+                const {success, content, message: msg} = await deleteAdmin(id);
+                if(success){
+                    message.success(msg || content, 2);
+                    await getList({ page });
+                }
+                else{
+                    const errStr = msg || content;
+                    message.error(errStr, 2);
+                    if(errStr === INVALID_LOGIN_MSG){
+                        setUserInfo({} as any);
+                        localStorage.removeItem('u');
+                        updateAxios(null);
+                    }
+                }
             }
         });
     }, []);

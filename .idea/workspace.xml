@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="5bd4908d-05d6-4e1a-ad83-ff8971f9815c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/robots.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AdminModal/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AdminModal/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AdminTable/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AdminTable/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AlarmItem/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AlarmItem/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChemicalAddition/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChemicalAddition/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChemicalDetail/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChemicalDetail/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/EnterpriseTable/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/EnterpriseTable/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Home/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Home/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/LoginBox/index.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LoginBox/index.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/LoginBox/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LoginBox/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TransferDetail/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TransferDetail/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/UserInfo/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/UserInfo/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/interface/admin.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/interface/admin.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Alarm/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Alarm/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Chemicals/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Chemicals/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Login/index.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Login/index.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Login/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Login/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Transfer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Transfer/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/axios.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/axios.tsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1nkPhng7pD9R927HNOi3j3KjX9J" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/wifi-connector" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5bd4908d-05d6-4e1a-ad83-ff8971f9815c" name="Default Changelist" comment="" />
+      <created>1611931239966</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1611931239966</updated>
+      <workItem from="1611931243961" duration="71000" />
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="421" y="116" key="FileChooserDialogImpl" timestamp="1611931314084">
+      <screen x="0" y="0" width="1280" height="720" />
+    </state>
+    <state x="421" y="116" key="FileChooserDialogImpl/0.0.1280.720@0.0.1280.720" timestamp="1611931314084" />
+  </component>
+</project>
